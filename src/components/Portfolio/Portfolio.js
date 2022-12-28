@@ -4,19 +4,28 @@ import './Portfolio.css';
 function Portfolio() {
     return (
         <section className="portfolio">
-            <p className="portfolio__text">Портфолио</p>
+            <h3 className="portfolio__text">Портфолио</h3>
             <ul className='portfolio__links'>
                 <li className="portfolio__link-container">
                     <p className='portfolio__link-text'>Статичный сайт</p>
-                    <button className="portfolio__link-button">↗</button>
+                    <button
+                    aria-label="Link to portfolio"
+                    type="button"
+                    className="portfolio__link-button">↗</button>
                 </li>
                 <li className="portfolio__link-container">
                     <p className='portfolio__link-text'>Адаптивный сайт</p>
-                    <button className="portfolio__link-button">↗</button>
+                    <button
+                    aria-label="Link to portfolio"
+                    type="button"
+                    className="portfolio__link-button">↗</button>
                 </li>
                 <li className="portfolio__link-container">
                     <p className='portfolio__link-text'>Одностраничное приложение</p>
-                    <button className="portfolio__link-button">↗</button>
+                    <button
+                    aria-label="Link to portfolio"
+                    type="button"
+                    className="portfolio__link-button">↗</button>
                 </li>
             </ul>
         </section>

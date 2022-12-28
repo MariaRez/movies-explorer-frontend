@@ -104,12 +104,12 @@
 
     .portfolio__text {
         font-size: 14px;
-        max-width: 292px;
+        min-width: 292px;
         padding-bottom: 40px;
     }
 
     .portfolio__links {
-        max-width: 292px;
+        min-width: 292px;
     }
 
     .portfolio__link-text {
