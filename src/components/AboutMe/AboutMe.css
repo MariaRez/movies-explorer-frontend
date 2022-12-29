@@ -1,6 +1,6 @@
 .about-me {
     width: 100%;
-    padding-bottom: 100px;
+    padding: 110px 0 100px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -40,7 +40,7 @@
     min-width: 364px;
 }
 
-.about-me_name {
+.about-me__name {
     margin: 0;
     padding-bottom: 18px;
     font-family: 'Inter';
@@ -52,7 +52,7 @@
     color: #FFFFFF;
 }
 
-.about-me_about {
+.about-me__about {
     margin: 0;
     padding-bottom: 26px;
     font-family: 'Inter';
@@ -64,7 +64,7 @@
     mix-blend-mode: normal;
 }
 
-.about-me_description {
+.about-me__description {
     margin: 0;
     padding-bottom: 99px;
     font-style: normal;
@@ -90,7 +90,7 @@
     opacity: 0.6;
 }
 
-.about-me_photo {
+.about-me__photo {
     width: 270px;
     height: 327px;
     border-radius: 10px;
@@ -98,7 +98,7 @@
 
 @media (max-width: 769px) {
     .about-me {
-        padding-bottom: 91px;
+        padding: 90px 0 91px;
     }
 
     .about-me__text {
@@ -109,25 +109,25 @@
         max-width: 668px;
     }
 
-    .about-me_name {
+    .about-me__name {
         font-size: 40px;
         line-height: 40px;
         padding-bottom: 16px;
     }
 
-    .about-me_about {
+    .about-me__about {
         padding-bottom: 20px;
         font-size: 12px;
         line-height: 18px;
     }
 
-    .about-me_description {
+    .about-me__description {
         font-size: 12px;
         line-height: 18px;
         padding-bottom: 87px;
     }
 
-    .about-me_photo {
+    .about-me__photo {
         width: 255px;
         height: 307px;
     }
@@ -146,7 +146,7 @@
 
 @media (max-width: 425px) {
     .about-me {
-        padding-bottom: 70px;
+        padding: 70px 0;
     }
 
     .about-me__text {
@@ -161,24 +161,24 @@
         min-width: 292px;
     }
 
-    .about-me_name {
+    .about-me__name {
         font-size: 30px;
         line-height: 36px;
         padding-bottom: 20px;
     }
 
-    .about-me_about {
+    .about-me__about {
         font-size: 11px;
         line-height: 16px;
     }
 
-    .about-me_description {
+    .about-me__description {
         font-size: 11px;
         line-height: 16px;
         padding-bottom: 40px;
     }
 
-    .about-me_photo {
+    .about-me__photo {
         width: 292px;
         height: 352px;
         padding-bottom: 40px;
