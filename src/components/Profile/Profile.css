@@ -25,18 +25,17 @@
 
 .form__fieldset {
     margin: 0;
-    padding: 17px 0 0;
+    padding: 0 0 16px;
     width: 100%;
     border: none;
-    border-top: 1px solid #424242;
+    border-bottom: 1px solid #424242;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
 
-.form__fieldset:first-of-type{
-    border-top: none;
-    padding: 0;
+.form__fieldset:last-of-type{
+    border-bottom: none;
 }
 
 .form__label  {
@@ -59,18 +58,23 @@
     text-align: right;
 }
 
+.form__input_active {
+    color: #EE3465;
+}
+
 .form__input:active, :hover, :focus {
     outline: 0;
     outline-offset: 0;
 }
 
 .error {
+    padding-top: 6px;
+    height: 12px;
     font-style: normal;
     font-weight: 400;
     font-size: 10px;
     line-height: 12px;
     color: #EE3465;
-    height: 16px;
     opacity: 0;
     transition: 0.3s;
 }
@@ -96,7 +100,7 @@
 }
 
 .form__button_type_change {
-    padding: 204px 0 0;
+    padding: 186px 0 0;
     color: #FFFFFF;
 }
 
@@ -115,7 +119,7 @@
     }
 
     .form__button_type_change {
-        padding: 194px 0 0;
+        padding: 174px 0 0;
     }
 }
 
@@ -133,6 +137,6 @@
     }
 
     .form__button_type_change {
-        padding: 363px 0 0;
+        padding: 345px 0 0;
     }
 }

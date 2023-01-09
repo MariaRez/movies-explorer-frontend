@@ -5,7 +5,7 @@ function Profile() {
     return (
         <section className="profile">
             <h3 className="profile__title">Привет, !</h3>
-            <form className="form">
+            <form name="profile" className="form">
                 <fieldset  className="form__fieldset">
                     <label 
                     className="form__label"
@@ -22,7 +22,7 @@ function Profile() {
                     />
                 </fieldset>
                 <span 
-                    className="error error_active"
+                    className="error"
                     id="name-error"></span>
                 <fieldset className="form__fieldset">
                     <label

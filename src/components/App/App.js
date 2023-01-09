@@ -5,6 +5,8 @@ import Footer from '../Footer/Footer';
 import './App.css';
 import PageNotFound from "../PageNotFound/PageNotFound";
 import Profile from "../Profile/Profile";
+import Register from "../Register/Register";
+import Login from "../Login/Login";
 
 function App() {
 
@@ -24,8 +26,10 @@ function App() {
           <Profile />
         </Route>
         <Route exact path="/signin">
+          <Login/>
         </Route>
         <Route exact path="/signup">
+          <Register/>
         </Route>
         <Route path="/*">
           <PageNotFound />
