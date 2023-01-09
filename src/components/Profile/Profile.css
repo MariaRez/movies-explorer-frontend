@@ -1,0 +1,138 @@
+.profile {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 70px;
+}
+
+.profile__title {
+    margin: 74px 0 123px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 29px;
+    text-align: center;
+    color: #FFFFFF;
+}
+
+.form {
+    width: 410px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form__fieldset {
+    margin: 0;
+    padding: 17px 0 0;
+    width: 100%;
+    border: none;
+    border-top: 1px solid #424242;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.form__fieldset:first-of-type{
+    border-top: none;
+    padding: 0;
+}
+
+.form__label  {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 11px;
+    line-height: 13px;
+    color: #FFFFFF;
+}
+
+.form__input {
+    background-color: #202020;
+    border: none;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 11px;
+    line-height: 13px;
+    color: #FFFFFF;
+    text-align: right;
+}
+
+.form__input:active, :hover, :focus {
+    outline: 0;
+    outline-offset: 0;
+}
+
+.error {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 12px;
+    color: #EE3465;
+    height: 16px;
+    opacity: 0;
+    transition: 0.3s;
+}
+
+.error_active {
+    opacity: 1;
+}
+
+.form__button {
+    margin: 0;
+    background-color: #202020;
+    border: none;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 16px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+.form__button:hover {
+    opacity: 0.6;
+}
+
+.form__button_type_change {
+    padding: 204px 0 0;
+    color: #FFFFFF;
+}
+
+.form__button_type_exit {
+    padding: 16px 0 0;
+    color: #EE3465;
+}
+
+@media (max-width: 769px) {
+    .profile {
+        padding-bottom: 269px;
+    }
+
+    .profile__title {
+        margin: 236px 0 96px;
+    }
+
+    .form__button_type_change {
+        padding: 194px 0 0;
+    }
+}
+
+@media (max-width: 425px) {
+    .profile {
+        padding-bottom: 40px;
+    }
+
+    .profile__title {
+        margin: 70px 0 80px;
+    }
+
+    .form {
+        width: 260px;
+    }
+
+    .form__button_type_change {
+        padding: 363px 0 0;
+    }
+}
