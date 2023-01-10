@@ -7,6 +7,7 @@ import PageNotFound from "../PageNotFound/PageNotFound";
 import Profile from "../Profile/Profile";
 import Register from "../Register/Register";
 import Login from "../Login/Login";
+import Movies from "../Movies/Movies";
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
           <Main />
         </Route>
         <Route exact path="/movies">
+          <Movies />
         </Route>
         <Route exact path="/saved-movies">
         </Route>

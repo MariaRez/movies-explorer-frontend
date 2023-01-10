@@ -67,7 +67,7 @@
     .footer__info {
         min-width: 300px;
     }
-  }
+}
 
 @media (max-width: 425px) {
     .footer__text {
@@ -98,4 +98,4 @@
         font-size: 12px;
         line-height: 15px;
     }
-  }
+}
