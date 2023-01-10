@@ -66,9 +66,7 @@
     cursor: pointer;
     transition: opacity 0.3s ease;
     color: #FFFFFF;
-    background-color: #202020;
-    border: none;
-    outline: none;
+    text-decoration: none;
 }
 
 .portfolio__link-button:hover {
