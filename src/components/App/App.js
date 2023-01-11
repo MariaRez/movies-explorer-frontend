@@ -8,6 +8,7 @@ import Profile from "../Profile/Profile";
 import Register from "../Register/Register";
 import Login from "../Login/Login";
 import Movies from "../Movies/Movies";
+import SavedMovies from "../SavedMovies/SavedMovies";
 
 function App() {
 
@@ -23,6 +24,7 @@ function App() {
           <Movies />
         </Route>
         <Route exact path="/saved-movies">
+          <SavedMovies />
         </Route>
         <Route exact path="/profile">
           <Profile />

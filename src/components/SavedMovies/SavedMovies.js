@@ -2,18 +2,17 @@ import React from 'react'
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Preloader from '../Preloader/Preloader';
 import SearchForm from '../SearchForm/SearchForm';
-import './Movies.css'
-import { movies } from '../../utils/movies';
+import './SavedMovies.css'
+import { savedMovies } from '../../utils/movies';
 
-function Movies () {
+function SavedMovies () {
     return (
-        <section className='movies'>
+        <section className='saved-movies'>
             <SearchForm />
             {/* <Preloader /> */}
-            <MoviesCardList movies={movies}/>
-            <button className="movies__more-button">Еще</button>
+            <MoviesCardList movies={savedMovies}/>
         </section>
     )
 };
 
-export default Movies;
+export default SavedMovies;
