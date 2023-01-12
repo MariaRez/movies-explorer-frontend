@@ -9,6 +9,7 @@ import Register from "../Register/Register";
 import Login from "../Login/Login";
 import Movies from "../Movies/Movies";
 import SavedMovies from "../SavedMovies/SavedMovies";
+import Header from "../Header/Header";
 
 function App() {
 
@@ -16,6 +17,7 @@ function App() {
 
   return (
     <div className="page">
+      {location.pathname === "/" || location.pathname === "/movies" || location.pathname === "/saved-movies" || location.pathname === "/profile" ? <Header /> : ''}
       <Switch>
         <Route exact path="/">
           <Main />
