@@ -29,9 +29,6 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-}
-
-.header__links_place_main {
     justify-content: end;
 }
 
@@ -53,16 +50,26 @@
     opacity: 0.6;
 }
 
-.header__link_to_signup {
-    color: #FFFFFF;
-    margin-right: 30px;
+.header__link-image {
+    width: 100px;
+    height: 32px;
 }
 
-.header__link_to_signin {
+.header__link_color_white {
+    color: #FFFFFF;
+}
+
+.header__link_color_green {
     width: 76px;
+    margin-left: 30px;
     background-color: #3DDC84;
     border-radius: 3px;
     color: #000000;
+}
+
+.header__link_right {
+    margin-right: auto;
+    padding-left: 16px;
 }
 
 @media (max-width: 769px) {
@@ -83,12 +90,9 @@
         line-height: 16px;
         height: 26px;
     }
-
-    .header__link_to_signup {
-        margin-right: 14px;
-    }
     
-    .header__link_to_signin {
+    .header__link_color_green {
         width: 54px;
+        margin-left: 14px;
     }
 }
