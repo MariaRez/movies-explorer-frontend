@@ -1,6 +1,8 @@
 # movies-explorer-frontend
 Frontend for the diploma
 
+Ссылка на сгенерированный макет https://disk.yandex.ru/d/XLTAY9OVFSzRHw
+
 Запустить приложение в режиме разработки:
 
 ### `npm start`

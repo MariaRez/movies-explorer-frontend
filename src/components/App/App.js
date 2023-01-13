@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { Route, Switch, useLocation } from "react-router-dom";
 import Main from "../Main/Main";
 import Footer from '../Footer/Footer';
@@ -10,6 +10,7 @@ import Login from "../Login/Login";
 import Movies from "../Movies/Movies";
 import SavedMovies from "../SavedMovies/SavedMovies";
 import Header from "../Header/Header";
+// import InfoTooltip from "../InfoTooltip/InfoTooltip";
 
 function App() {
 
