@@ -6,6 +6,7 @@ import "./Navigation.css";
 function Navigation( { handleBurgerMenuButton }) {
     return (
         <section className="navigation">
+          <p className="navigation__overlay"/>
           <button aria-label="Close navigation" className="navigation__close-button" type="button" onClick={handleBurgerMenuButton}/>
           <nav className="navigation__links">
             <Link to="/" className="navigation__link" onClick={handleBurgerMenuButton}>Главная</Link>
