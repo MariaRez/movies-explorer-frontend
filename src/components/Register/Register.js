@@ -1,9 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../../images/logo.svg";
 import "./Register.css";
 
-function Register() {
+function Register({ handleRegister }) {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  function handleRegisterName(evt) {
+    setName(evt.target.value);
+  }
+  function handleRegisterEmail(evt) {
+    setEmail(evt.target.value);
+  }
+  function handleRegisterPassword(evt) {
+    setPassword(evt.target.value);
+  }
+
+  function handleSubmit(evt) {
+    evt.preventDefault();
+    handleRegister(name, email, password);
+  }
+
   return (
     <section className="register">
       <div className="register__container">
@@ -11,7 +30,11 @@ function Register() {
           <img className="logo" src={logo} alt="Логотоп" />
         </Link>
         <h3 className="register__title">Добро пожаловать!</h3>
-        <form name="register" className="register__form">
+        <form
+          name="register"
+          className="register__form"
+          onSubmit={handleSubmit}
+        >
           <fieldset className="register__fieldset">
             <label className="register__label" htmlFor="name">
               Имя
@@ -25,6 +48,8 @@ function Register() {
               minLength="2"
               maxLength="40"
               placeholder="Ваше имя"
+              value={name}
+              onChange={handleRegisterName}
             />
           </fieldset>
           <span className="register__error" id="name-error"></span>
@@ -39,6 +64,8 @@ function Register() {
               id="email"
               required
               placeholder="Ваша почта"
+              value={email}
+              onChange={handleRegisterEmail}
             />
           </fieldset>
           <span className="register__error" id="email-error"></span>
@@ -53,6 +80,8 @@ function Register() {
               id="password"
               required
               placeholder="Ваш пароль"
+              value={password}
+              onChange={handleRegisterPassword}
             />
           </fieldset>
           <span className="register__error" id="password-error"></span>
