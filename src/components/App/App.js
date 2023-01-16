@@ -1,8 +1,8 @@
-import React, {useState} from "react";
+import React from "react";
 import { Route, Switch, useLocation } from "react-router-dom";
 import Main from "../Main/Main";
-import Footer from '../Footer/Footer';
-import './App.css';
+import Footer from "../Footer/Footer";
+import "./App.css";
 import PageNotFound from "../PageNotFound/PageNotFound";
 import Profile from "../Profile/Profile";
 import Register from "../Register/Register";
@@ -13,12 +13,18 @@ import Header from "../Header/Header";
 // import InfoTooltip from "../InfoTooltip/InfoTooltip";
 
 function App() {
-
   const location = useLocation(); // подвал приложения должен быть на странице о проекте, фильмы и сохраненные фильмы
 
   return (
     <div className="page">
-      {location.pathname === "/" || location.pathname === "/movies" || location.pathname === "/saved-movies" || location.pathname === "/profile" ? <Header /> : ''}
+      {location.pathname === "/" ||
+      location.pathname === "/movies" ||
+      location.pathname === "/saved-movies" ||
+      location.pathname === "/profile" ? (
+        <Header />
+      ) : (
+        ""
+      )}
       <Switch>
         <Route exact path="/">
           <Main />
@@ -33,18 +39,24 @@ function App() {
           <Profile />
         </Route>
         <Route exact path="/signin">
-          <Login/>
+          <Login />
         </Route>
         <Route exact path="/signup">
-          <Register/>
+          <Register />
         </Route>
         <Route path="/*">
           <PageNotFound />
         </Route>
       </Switch>
-      {location.pathname === "/" || location.pathname === "/movies" || location.pathname === "/saved-movies" ? <Footer /> : ''}
+      {location.pathname === "/" ||
+      location.pathname === "/movies" ||
+      location.pathname === "/saved-movies" ? (
+        <Footer />
+      ) : (
+        ""
+      )}
     </div>
-  )
+  );
 }
 
 export default App;

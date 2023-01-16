@@ -19,6 +19,11 @@
     padding: 10px;
 }
 
+.search-form__form:focus-within {
+    outline: 0;
+    outline-offset: 0;
+  }
+
 .search-form__input {
     width: 70%;
     padding: 15px;
@@ -28,6 +33,11 @@
     color: #FFFFFF;
     background-color: #202020;
     border: none;
+}
+
+.search-form__input:active, :hover, :focus {
+    outline: 0;
+    outline-offset: 0;
 }
 
 .search-form__button {
