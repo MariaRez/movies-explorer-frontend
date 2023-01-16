@@ -1,0 +1,23 @@
+.page {
+    background: #202020;
+    min-height: 100vh;
+    min-width: 320px;
+    font-family: "Inter", "Arial";
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+
+.logo {
+    width: 38px;
+    height: 38px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+.logo:hover {
+    opacity: 0.6;
+}

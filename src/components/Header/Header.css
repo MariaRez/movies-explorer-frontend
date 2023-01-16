@@ -1,0 +1,136 @@
+.header {
+    margin: 0 auto;
+    width: 100%;
+    position: relative;
+}
+
+.header_color_emerald {
+    background-color: #073042;
+}
+
+.header_color_dark {
+    background-color: #202020; 
+}
+
+.header__container {
+    margin: 0 auto;
+    padding: 21px 0;
+    width: 90%;
+    max-width: 1140px;
+    min-width: 708px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.header__links {
+    width: 97%;
+    max-width: 1102px;
+    padding-left: 44px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: end;
+}
+
+.header__link {
+    text-decoration: none;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 32px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+.header__link:hover {
+    opacity: 0.6;
+}
+
+.header__link-image {
+    width: 100px;
+    height: 32px;
+}
+
+.header__link_color_white {
+    color: #FFFFFF;
+}
+
+.header__link_color_green {
+    width: 76px;
+    margin-left: 30px;
+    background-color: #3DDC84;
+    border-radius: 3px;
+    color: #000000;
+}
+
+.header__link_right {
+    margin-right: auto;
+    padding-left: 16px;
+}
+
+.header__burger-menu {
+    display: none;
+    position: absolute;
+    top: 15px;
+    right: 30px;
+    padding: 0;
+    width: 44px;
+    height: 44px;
+    opacity: 1;
+    background-image: url(/src/images/burger.svg);
+    background-color: #202020;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+.header__burger-menu:hover {
+    opacity: 0.6;
+}
+
+@media (max-width: 769px) {
+    .header__container {
+        padding: 18px 0;
+    }
+
+    .header__link_hidden {
+        display: none;
+    }
+
+    .header__burger-menu {
+        display: block;
+    }
+}
+
+@media (max-width: 767px) {
+    .header__container {
+        min-width: 292px;
+    }
+}
+
+@media (max-width: 425px) {
+    .header__link {
+        font-size: 10px;
+        line-height: 16px;
+        height: 26px;
+    }
+    
+    .header__link_color_green {
+        width: 54px;
+        margin-left: 14px;
+    }
+
+    .header__burger-menu {
+        right: 14px;
+        width: 40px;
+        height: 43px;
+    }
+}
