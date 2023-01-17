@@ -11,15 +11,19 @@ import Movies from "../Movies/Movies";
 import SavedMovies from "../SavedMovies/SavedMovies";
 import Header from "../Header/Header";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
+import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 import { auth } from "../../utils/auth";
 import InfoTooltip from "../InfoTooltip/InfoTooltip";
 
 import success from "../../images/success.svg";
 import wrong from "../../images/wrong.svg";
+import { mainApi } from "../../utils/MainApi";
 
 function App() {
   const location = useLocation(); // подвал приложения должен быть на странице о проекте, фильмы и сохраненные фильмы
   const history = useHistory(); // для перенаправления (при проверке токена)
+
+  const [loggedIn, setLoggedIn] = useState(false); // залогинен ли пользователь
   const [currentUser, setCurrentUser] = useState({
     name: "",
     email: "",
@@ -31,63 +35,89 @@ function App() {
   const [isTextForInfoTooltip, setIsTextForInfoTooltip] = useState("");
 
   React.useEffect(() => {
+    if (loggedIn) {
+      Promise.all([mainApi.getUserInfo()])
+        .then(([userInfo]) => {
+          setCurrentUser(userInfo.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [loggedIn]);
+
+  React.useEffect(() => {
     checkToken();
   }, []);
 
+  // проверка токена
   function checkToken() {
-    // дополнить залогинен и емайл
     const token = localStorage.getItem("token");
     if (token) {
       auth
         .checkToken(token)
         .then((res) => {
-          history.push("/");
+          setLoggedIn(true);
+          history.push("/movies");
         })
         .catch((err) => {
           console.log(err);
         });
     }
   }
-
+  // регистрация нового пользователя
   function handleRegisterSubmit(name, email, password) {
     auth
       .register(name, email, password)
-      .then(() => {
-        setIsOpenInfoTooltip(true);
-        setIsImageForInfoTooltip(success);
-        setIsTextForInfoTooltip("Регистрация прошла успешно!");
-        setTimeout(() => {
-          setIsOpenInfoTooltip(false);
-          history.push("/signin"); // возможно нужно будет сменить в соотвествии с тз
-        }, 1000);
+      .then((res) => {
+        // скорректировать - сразу же вход пользователя и переход на страницу с фильмами
+        handleLoginSubmit(email, password);
+        history.push("/movies"); // возможно нужно будет сменить в соотвествии с тз
       })
       .catch(() => {
+        // скорректировать - появление ошибки выше кнопки зарегистироваться
         setIsOpenInfoTooltip(false);
         setIsImageForInfoTooltip(wrong);
         setIsTextForInfoTooltip("Упс! Что-то пошло не так!");
       });
   }
-
+  // вход в аккаунт пользователя
   function handleLoginSubmit(email, password) {
     auth
       .login(email, password)
       .then((res) => {
         localStorage.setItem("token", res.token);
-        history.push("/movies");
-        setIsOpenInfoTooltip(true);
-        setIsImageForInfoTooltip(success);
-        setIsTextForInfoTooltip("Вы вошли в свою учетную запись!");
+        history.push("/movies"); // не переходит автоматически, только после перезагрузки страницы
       })
       .catch(() => {
+        // скорректировать в соотвествии с ТЗ
         setIsOpenInfoTooltip(false);
         setIsImageForInfoTooltip(wrong);
         setIsTextForInfoTooltip("Упс! Что-то пошло не так!");
       });
   }
+  // выход из аккаунта
+  function handleExitSubmit() {
+    localStorage.removeItem("token");
+    setLoggedIn(false);
+    history.push("/");
+  }
 
   // исчезнование компонента с подсказкой
   function closeInfoTooltip() {
     setIsOpenInfoTooltip(false);
+  }
+
+  // редактирование профиля (имя и почта)
+  function handleUpdateUser(data) {
+    mainApi
+      .editProfile(data)
+      .then((userData) => {
+        setCurrentUser(userData.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   return (
@@ -105,15 +135,26 @@ function App() {
           <Route exact path="/">
             <Main />
           </Route>
-          <Route exact path="/movies">
-            <Movies />
-          </Route>
-          <Route exact path="/saved-movies">
-            <SavedMovies />
-          </Route>
-          <Route exact path="/profile">
-            <Profile />
-          </Route>
+          <ProtectedRoute 
+            exact
+            path="/movies"
+            loggedIn={loggedIn}
+            component={Movies}
+          />
+          <ProtectedRoute 
+            exact
+            path="/saved-movies"
+            loggedIn={loggedIn}
+            component={SavedMovies}
+          />
+          <ProtectedRoute 
+            exact
+            path="/profile"
+            onUpdateUser={handleUpdateUser}
+            handleExit={handleExitSubmit}
+            loggedIn={loggedIn}
+            component={Profile}
+          />
           <Route exact path="/signin">
             <Login handleLogin={handleLoginSubmit} />
           </Route>
