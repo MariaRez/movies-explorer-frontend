@@ -79,20 +79,25 @@
     font-size: 10px;
     line-height: 12px;
     color: #EE3465;
-    opacity: 0;
-    transition: 0.3s;
-}
-
-.login__error_active {
-    opacity: 1;
 }
 
 .login__error:last-of-type {
     padding-bottom: 24px;
 }
 
+.login__error-server {
+    margin: 0;
+    height: 35px;
+    text-align: center;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 29px;
+    color: #EE3465;
+}
+
 .login__button {
-    margin: 179px 0 16px;
+    margin: 144px 0 16px;
     padding: 13px 0 15px;
     width: 100%;
     font-style: normal;
@@ -109,6 +114,16 @@
 
 .login__button:hover {
     opacity: 0.6;
+}
+
+.login__button_disabled {
+    background: #424242;  
+    color:#8B8B8B;
+    cursor: none;
+}
+
+.login__button_disabled:hover {
+    opacity: 1;
 }
 
 .login__signin {
@@ -171,7 +186,7 @@
     }
 
     .login__button {
-        margin: 267px 0 14px;
+        margin: 232px 0 14px;
         padding-top: 15px;
         font-size: 12px;
         line-height: 15px;

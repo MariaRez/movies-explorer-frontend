@@ -24,15 +24,15 @@ function App() {
   const history = useHistory(); // для перенаправления (при проверке токена)
 
   const [loggedIn, setLoggedIn] = useState(false); // залогинен ли пользователь
-  const [currentUser, setCurrentUser] = useState({
-    name: "",
-    email: "",
-  });
+  const [currentUser, setCurrentUser] = useState({});
 
   // появление компонента с подсказкой, его изображение и текст
   const [isOpenInfoTooltip, setIsOpenInfoTooltip] = useState(false);
   const [isImageForInfoTooltip, setIsImageForInfoTooltip] = useState("");
   const [isTextForInfoTooltip, setIsTextForInfoTooltip] = useState("");
+
+  // ошибка над кнопками зарегистрироваться и войти
+  const [errorMessage, setErrorMessage] = useState("");
 
   React.useEffect(() => {
     if (loggedIn) {
@@ -56,7 +56,7 @@ function App() {
     if (token) {
       auth
         .checkToken(token)
-        .then((res) => {
+        .then(() => {
           setLoggedIn(true);
           history.push("/movies");
         })
@@ -74,19 +74,22 @@ function App() {
         setIsImageForInfoTooltip(success);
         setIsTextForInfoTooltip("Регистрация прошла успешно! Добро пожаловать!");
         handleLoginSubmit(email, password);
-        setLoggedIn(true); // пользователь залогинен - доступны защищенные роуты
         setTimeout(() => {
           setIsOpenInfoTooltip(false);
         }, 1500);
       })
       .then(() => history.push("/movies"))
-      .catch(() => {
-        // скорректировать - появление ошибки выше кнопки зарегистироваться
-        setIsOpenInfoTooltip(false);
-        setIsImageForInfoTooltip(wrong);
-        setIsTextForInfoTooltip("Упс! Что-то пошло не так!");
+      .catch((err) => {
+        if (err.includes(409)) {
+          setErrorMessage("Пользователь с таким email уже существует");
+        } else if (err.includes(500)){
+          setErrorMessage("Внутренняя ошибка сервера, попробуйте позднее.");
+        } else {
+          setErrorMessage("Очень жаль, произошла ошибка при регистрации пользователя.");
+        }
       });
   }
+
   // вход в аккаунт пользователя
   function handleLoginSubmit(email, password) {
     auth
@@ -102,11 +105,12 @@ function App() {
         }, 1500);
       })
       .then(() => history.push("/movies"))
-      .catch(() => {
-        // скорректировать - появление ошибки выше кнопки зарегистироваться
-        setIsOpenInfoTooltip(false);
-        setIsImageForInfoTooltip(wrong);
-        setIsTextForInfoTooltip("Упс! Что-то пошло не так!");
+      .catch((err) => {
+        if (err.includes(500)){
+          setErrorMessage("Внутренняя ошибка сервера, попробуйте позднее.");
+        } else {
+          setErrorMessage("Очень жаль, произошла ошибка при авторизации пользователя.");
+        }
       });
   }
   // выход из аккаунта
@@ -172,7 +176,9 @@ function App() {
             <Login handleLogin={handleLoginSubmit} />
           </Route>
           <Route exact path="/signup">
-            <Register handleRegister={handleRegisterSubmit} />
+            <Register
+              handleRegister={handleRegisterSubmit}
+              errorMessage={errorMessage}/>
           </Route>
           <Route path="/*">
             <PageNotFound />

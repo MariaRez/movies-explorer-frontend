@@ -1,26 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import logo from "../../images/logo.svg";
+import useFormWithValidation from "../../utils/useFormWithValidation";
 import "./Register.css";
 
-function Register({ handleRegister }) {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+function Register({ handleRegister, errorMessage, isActive }) {
+  const { values, handleChange, errors, isValid, resetForm } = useFormWithValidation();
+  const submitButtonClassName = `register__button ${!isValid && "register__button_disabled"}`;
 
-  function handleRegisterName(evt) {
-    setName(evt.target.value);
-  }
-  function handleRegisterEmail(evt) {
-    setEmail(evt.target.value);
-  }
-  function handleRegisterPassword(evt) {
-    setPassword(evt.target.value);
-  }
+  useEffect(() => {
+    resetForm("", "", false);
+  }, [resetForm]); //сброс формы
 
   function handleSubmit(evt) {
     evt.preventDefault();
-    handleRegister(name, email, password);
+    handleRegister(values.name, values.email, values.password);
   }
 
   return (
@@ -41,18 +35,19 @@ function Register({ handleRegister }) {
             </label>
             <input
               className="register__input"
-              type="text"
+              type="name"
               name="name"
               id="name"
               required
               minLength="2"
               maxLength="40"
+              pattern="^[A-Za-zА-Яа-яЁё /s -]+$"
               placeholder="Ваше имя"
-              value={name}
-              onChange={handleRegisterName}
+              value={values.name || ""}
+              onChange={handleChange}
             />
           </fieldset>
-          <span className="register__error" id="name-error"></span>
+          <span className="register__error" id="name-error">{errors.name || ""}</span>
           <fieldset className="register__fieldset">
             <label className="register__label" htmlFor="email">
               E-mail
@@ -64,11 +59,11 @@ function Register({ handleRegister }) {
               id="email"
               required
               placeholder="Ваша почта"
-              value={email}
-              onChange={handleRegisterEmail}
+              value={values.email || ""} //значение почты или пустая строка
+              onChange={handleChange}
             />
           </fieldset>
-          <span className="register__error" id="email-error"></span>
+          <span className="register__error" id="email-error">{errors.email || ""}</span>
           <fieldset className="register__fieldset">
             <label className="register__label" htmlFor="password">
               Пароль
@@ -80,12 +75,16 @@ function Register({ handleRegister }) {
               id="password"
               required
               placeholder="Ваш пароль"
-              value={password}
-              onChange={handleRegisterPassword}
+              value={values.password || ""} //значение пароля или пустая строка
+              onChange={handleChange}
             />
           </fieldset>
-          <span className="register__error" id="password-error"></span>
-          <button className="register__button" type="submit">
+          <span className="register__error" id="password-error">{errors.password || ""}</span>
+          <p className="register__error-server">{errorMessage}</p>
+          <button
+            className={submitButtonClassName}
+            type="submit"
+            disabled={!isValid}>
             Зарегистрироваться
           </button>
         </form>

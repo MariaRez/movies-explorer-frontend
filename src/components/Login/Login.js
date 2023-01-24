@@ -1,22 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import logo from "../../images/logo.svg";
+import useFormWithValidation from "../../utils/useFormWithValidation";
 import "./Login.css";
 
-function Login({ handleLogin }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+function Login({ handleLogin, errorMessage }) {
+  const { values, handleChange, errors, isValid, resetForm } = useFormWithValidation();
+  const submitButtonClassName = `login__button ${!isValid && "login__button_disabled"}`;
 
-  function handleLoginEmail(evt) {
-    setEmail(evt.target.value);
-  }
-  function handleLoginPassword(evt) {
-    setPassword(evt.target.value);
-  }
+  useEffect(() => {
+    resetForm("", "", false);
+  }, [resetForm]); //сброс формы
 
   function handleSubmit(evt) {
     evt.preventDefault();
-    handleLogin(email, password);
+    handleLogin(values.email, values.password);
   }
 
   return (
@@ -42,11 +40,11 @@ function Login({ handleLogin }) {
               id="email"
               required
               placeholder="Ваша почта"
-              value={email}
-              onChange={handleLoginEmail}
+              value={values.email || ""}
+              onChange={handleChange}
             />
           </fieldset>
-          <span className="login__error" id="email-error"></span>
+          <span className="login__error" id="email-error">{errors.email || ""}</span>
           <fieldset className="login__fieldset">
             <label className="login__label" htmlFor="password">
               Пароль
@@ -58,12 +56,16 @@ function Login({ handleLogin }) {
               id="password"
               required
               placeholder="Ваш пароль"
-              value={password}
-              onChange={handleLoginPassword}
+              value={values.password || ""} 
+              onChange={handleChange}
             />
           </fieldset>
-          <span className="login__error" id="password-error"></span>
-          <button className="login__button" type="submit">
+          <span className="login__error" id="password-error">{errors.password || ""}</span>
+          <p className="login__error-server">{errorMessage}</p>
+          <button 
+            className={submitButtonClassName}
+            type="submit"
+            disabled={!isValid}>
             Войти
           </button>
         </form>
