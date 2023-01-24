@@ -69,11 +69,17 @@ function App() {
   function handleRegisterSubmit(name, email, password) {
     auth
       .register(name, email, password)
-      .then((res) => {
-        // скорректировать - сразу же вход пользователя и переход на страницу с фильмами
+      .then(() => {
+        setIsOpenInfoTooltip(true);
+        setIsImageForInfoTooltip(success);
+        setIsTextForInfoTooltip("Регистрация прошла успешно! Добро пожаловать!");
         handleLoginSubmit(email, password);
-        history.push("/movies"); // возможно нужно будет сменить в соотвествии с тз
+        setLoggedIn(true); // пользователь залогинен - доступны защищенные роуты
+        setTimeout(() => {
+          setIsOpenInfoTooltip(false);
+        }, 1500);
       })
+      .then(() => history.push("/movies"))
       .catch(() => {
         // скорректировать - появление ошибки выше кнопки зарегистироваться
         setIsOpenInfoTooltip(false);
@@ -87,10 +93,17 @@ function App() {
       .login(email, password)
       .then((res) => {
         localStorage.setItem("token", res.token);
-        history.push("/movies"); // не переходит автоматически, только после перезагрузки страницы
+        setLoggedIn(true);
+        setIsOpenInfoTooltip(true);
+        setIsImageForInfoTooltip(success);
+        setIsTextForInfoTooltip("Рады снова видеть!");
+        setTimeout(() => {
+          setIsOpenInfoTooltip(false);
+        }, 1500);
       })
+      .then(() => history.push("/movies"))
       .catch(() => {
-        // скорректировать в соотвествии с ТЗ
+        // скорректировать - появление ошибки выше кнопки зарегистироваться
         setIsOpenInfoTooltip(false);
         setIsImageForInfoTooltip(wrong);
         setIsTextForInfoTooltip("Упс! Что-то пошло не так!");
