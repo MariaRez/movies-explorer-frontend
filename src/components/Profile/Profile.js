@@ -1,36 +1,28 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
+import useFormWithValidation from "../../utils/useFormWithValidation";
 import "./Profile.css";
 
-function Profile({ isOpen, onUpdateUser, handleExit }) {
+function Profile({ onUpdateUser, handleExit, errorMessage }) {
   const currentUser = useContext(CurrentUserContext);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const { values, handleChange, errors, isValid, resetForm } = useFormWithValidation();
+  const submitButtonClassName = `form__button form__button_type_change ${!isValid && "form__button_disabled"}`;
 
-  useEffect(() => {
-    setName(currentUser.name);
-    setEmail(currentUser.email);
-  }, [currentUser, isOpen]);
-
-  function handleNameEdit(evt) {
-    setName(evt.target.value);
-  }
-
-  function handleEmailEdit(evt) {
-    setEmail(evt.target.value);
-  }
+   useEffect(() => {
+    resetForm(currentUser, "", false);
+  }, [currentUser, resetForm]);
 
   function handleSubmit(evt) {
     evt.preventDefault();
     onUpdateUser({
-      name: name,
-      email: email,
+      name: values.name,
+      email: values.email
     });
   }
 
   return (
     <section className="profile">
-      <h3 className="profile__title">Привет, {name}!</h3>
+      <h3 className="profile__title">Привет, {currentUser?.name}!</h3>
       <form name="profile" className="form" onSubmit={handleSubmit}>
         <fieldset className="form__fieldset">
           <label className="form__label" htmlFor="name">
@@ -44,12 +36,13 @@ function Profile({ isOpen, onUpdateUser, handleExit }) {
             required
             minLength="2"
             maxLength="40"
-            placeholder="Ваше имя"
-            value={name}
-            onChange={handleNameEdit}
+            pattern="^[A-Za-zА-Яа-яЁё /s -]+$"
+            placeholder="Ваше новое имя"
+            value={values.name || ""}
+            onChange={handleChange}
           />
         </fieldset>
-        <span className="error" id="name-error"></span>
+        <span className="profile__error" id="name-error">{errors.name || ""}</span>
         <fieldset className="form__fieldset">
           <label className="form__label" htmlFor="email">
             E-mail
@@ -61,18 +54,19 @@ function Profile({ isOpen, onUpdateUser, handleExit }) {
             id="email"
             required
             minLength="2"
-            placeholder="Ваша почта"
-            value={email}
-            onChange={handleEmailEdit}
+            placeholder="Ваша новая почта"
+            value={values.email || ""}
+            onChange={handleChange}
           />
         </fieldset>
-        <span className="error" id="email-error"></span>
+        <span className="profile__error" id="email-error">{errors.email || ""}</span>
+        <p className="profile__error-server">{errorMessage}</p>
         <button
-          className="form__button form__button_type_change"
-          aria-label="Change data"
+          className={submitButtonClassName}
           type="submit"
-        >
-          Редактировать
+          aria-label="Change data"
+          disabled={!isValid}>
+            Редактировать
         </button>
       </form>
       <button

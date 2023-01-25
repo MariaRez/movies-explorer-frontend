@@ -119,7 +119,7 @@
 .register__button_disabled {
     background: #424242;  
     color:#8B8B8B;
-    cursor: none;
+    cursor: not-allowed;
 }
 
 .register__button_disabled:hover {

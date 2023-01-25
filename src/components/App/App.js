@@ -53,18 +53,20 @@ function App() {
   // проверка токена
   function checkToken() {
     const token = localStorage.getItem("token");
+    const path = location.pathname; // в какой локации мы находились
     if (token) {
       auth
         .checkToken(token)
         .then(() => {
           setLoggedIn(true);
-          history.push("/movies");
+          history.push(path); //туда и отправляет
         })
         .catch((err) => {
           console.log(err);
         });
     }
   }
+
   // регистрация нового пользователя
   function handleRegisterSubmit(name, email, password) {
     auth
@@ -131,9 +133,19 @@ function App() {
       .editProfile(data)
       .then((userData) => {
         setCurrentUser(userData.data);
+        setIsOpenInfoTooltip(true);
+        setIsImageForInfoTooltip(success);
+        setIsTextForInfoTooltip("Данные профиля успешно обновлены!");
+        setTimeout(() => {
+          setIsOpenInfoTooltip(false);
+        }, 1500);
       })
       .catch((err) => {
-        console.log(err);
+        if (err.includes(500)){
+          setErrorMessage("Внутренняя ошибка сервера, попробуйте позднее.");
+        } else {
+          setErrorMessage("Очень жаль, произошла ошибка при изменении данных пользователя.");
+        }
       });
   }
 
@@ -171,9 +183,12 @@ function App() {
             handleExit={handleExitSubmit}
             loggedIn={loggedIn}
             component={Profile}
+            errorMessage={errorMessage}
           />
           <Route exact path="/signin">
-            <Login handleLogin={handleLoginSubmit} />
+            <Login
+              handleLogin={handleLoginSubmit}
+              errorMessage={errorMessage}/>
           </Route>
           <Route exact path="/signup">
             <Register
