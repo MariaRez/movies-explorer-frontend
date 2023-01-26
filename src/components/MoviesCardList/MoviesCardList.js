@@ -6,9 +6,10 @@ function MoviesCardList({ movies }) {
   return (
     <section className="movies-card-list">
       <ul className="movies-card-list__movies">
-        {movies.map((card) => {
+        {movies.map((card, id) => {
           return (
             <MoviesCard
+              key={id}
               title={card.title}
               duration={card.duration}
               link={card.link}
@@ -18,6 +19,7 @@ function MoviesCardList({ movies }) {
           );
         })}
       </ul>
+      <button className="movies-card-list__more-button">Еще</button>
     </section>
   );
 }

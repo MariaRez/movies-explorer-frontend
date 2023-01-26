@@ -10,7 +10,6 @@ function Movies({ isLoading }) {
     <section className="movies">
       <SearchForm />
       {isLoading ? <Preloader /> : <MoviesCardList movies={movies} />}
-      <button className="movies__more-button">Еще</button>
     </section>
   );
 }

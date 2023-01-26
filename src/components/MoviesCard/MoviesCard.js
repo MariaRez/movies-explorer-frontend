@@ -5,14 +5,13 @@ import "./MoviesCard.css";
 function MoviesCard({ isLiked, link, title, duration, trailerLink }) {
   const location = useLocation();
   const cardLikeButtonClassName = `card__like ${ isLiked ? "card__like_active" : ""}`;
-  // для лайка карточки с фильмом - при лайке попадает в сохраненные
-  function handleLikeMovies() {
-
-  }
-  // для удаления лайка карточки - удаляется из сохраненных
-  function handleDeleteLikeMovies() {
-
-  }
+  
+  // функция для преобразования минут в часы и минуты
+  function getTimeFromMins(mins) {
+    let hours = Math.trunc(mins / 60);
+    let minutes = mins % 60;
+    return hours + "ч " + minutes + "м";
+    }
 
   return (
     <div className="card">
@@ -34,7 +33,7 @@ function MoviesCard({ isLiked, link, title, duration, trailerLink }) {
           />
         )}
       </div>
-      <p className="card__duration">{duration}</p>
+      <p className="card__duration">{getTimeFromMins(duration)}</p>
     </div>
   );
 }
