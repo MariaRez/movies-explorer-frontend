@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Route, Switch, useHistory, useLocation } from "react-router-dom";
 import Main from "../Main/Main";
 import Footer from "../Footer/Footer";
@@ -16,7 +16,6 @@ import { auth } from "../../utils/auth";
 import InfoTooltip from "../InfoTooltip/InfoTooltip";
 
 import success from "../../images/success.svg";
-import wrong from "../../images/wrong.svg";
 import { mainApi } from "../../utils/MainApi";
 
 function App() {
@@ -31,10 +30,10 @@ function App() {
   const [isImageForInfoTooltip, setIsImageForInfoTooltip] = useState("");
   const [isTextForInfoTooltip, setIsTextForInfoTooltip] = useState("");
 
-  // ошибка над кнопками зарегистрироваться и войти
+  // ошибка над кнопками зарегистрироваться, войти и редактирование профиля
   const [errorMessage, setErrorMessage] = useState("");
-
-  React.useEffect(() => {
+  
+  useEffect(() => {
     if (loggedIn) {
       Promise.all([mainApi.getUserInfo()])
         .then(([userInfo]) => {
@@ -46,7 +45,7 @@ function App() {
     }
   }, [loggedIn]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     checkToken();
   }, []);
 

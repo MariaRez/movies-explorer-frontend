@@ -13,6 +13,7 @@ function MoviesCardList({ movies }) {
               duration={card.duration}
               link={card.link}
               isLiked={card.isLiked}
+              trailerLink={card.trailerLink}
             />
           );
         })}

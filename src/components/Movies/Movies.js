@@ -5,15 +5,14 @@ import SearchForm from "../SearchForm/SearchForm";
 import "./Movies.css";
 import { movies } from "../../utils/movies";
 
-function Movies() {
+function Movies({ isLoading }) {
   return (
     <section className="movies">
       <SearchForm />
-      {/* <Preloader /> */}
-      <MoviesCardList movies={movies} />
+      {isLoading ? <Preloader /> : <MoviesCardList movies={movies} />}
       <button className="movies__more-button">Еще</button>
     </section>
   );
 }
 
-export default Movies;
+export default Movies; 

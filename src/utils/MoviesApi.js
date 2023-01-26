@@ -10,7 +10,15 @@ class MoviesApi {
         }
         return Promise.reject(`Ошибка: ${res.status}`);
       }
-    
+
+    getMovies() {
+      return fetch(`${this._baseUrl}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then(this._сheckServerResponseStatus);
+    }
 }
   
   export const moviesApi = new MoviesApi({
