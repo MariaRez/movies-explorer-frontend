@@ -1,0 +1,14 @@
+import React from "react";
+ import "./UserInformation.css";
+
+ function UserInformation({ image, title, description }) {
+   return (
+     <div className="user-information">
+       <img className="user-information__image" src={image} alt={title} />
+       <h4 className="user-information__title">{title}</h4>
+       <p className="user-information__description">{description}</p>
+     </div>
+   );
+ }
+
+ export default UserInformation;

@@ -1,0 +1,47 @@
+.user-information {
+    width: 90%;
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.user-information__image {
+    width: 38px;
+    height: 38px;
+}
+
+.user-information__title {
+    margin: 20px 0;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 29px;
+    color: #FFFFFF;
+}
+
+.user-information__description {
+    margin: 0;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 18px;
+    color: #FFFFFF;
+}
+
+@media (max-width: 425px) {
+    .user-information__title {
+        font-size: 22px;
+        line-height: 295x;
+    }
+
+    .user-information__description {
+        margin: 0;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 15px;
+        color: #FFFFFF;
+    }
+}

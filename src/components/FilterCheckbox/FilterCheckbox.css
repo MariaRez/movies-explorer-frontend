@@ -1,6 +1,6 @@
 .filter-checkbox {
     width: 100%;
-    padding: 27px 0 44px;
+    padding: 9px 0 44px;
     display: flex;
     flex-direction: row;
     justify-items: start;
@@ -74,7 +74,7 @@
 
 @media (max-width: 425px) {
     .filter-checkbox {
-        padding: 31px 0 64px;
+        padding: 13px 0 64px;
     }
 
     .filter-checkbox__text {

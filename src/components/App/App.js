@@ -32,6 +32,9 @@ function App() {
 
   // ошибка над кнопками зарегистрироваться, войти и редактирование профиля
   const [errorMessage, setErrorMessage] = useState("");
+
+   //загрузка
+   const [isLoading, setIsLoading] = useState(false);
   
   useEffect(() => {
     if (loggedIn) {
@@ -148,6 +151,17 @@ function App() {
       });
   }
 
+  // функция фортировки фильмов на короткометражные - собираем массив в передаем его дальше (если продолжительность меньше или равна 40)
+  function sortingMovies(movies) {
+    const shortMoviesArray = movies.filter((movie) => movie.duration <= 40);
+    return shortMoviesArray;
+  }
+  // функция поиска - необходимо написать - сейчас белеберда - только включаем загрузку
+  function submitSearch() {
+    setIsLoading(true);
+    setTimeout(() => setIsLoading(false), 2000);
+  }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
@@ -168,6 +182,10 @@ function App() {
             path="/movies"
             loggedIn={loggedIn}
             component={Movies}
+            sortingMovies={sortingMovies}
+             onSubmitSearch={submitSearch}
+             setPreloader={setIsLoading}
+             isLoading={isLoading}
           />
           <ProtectedRoute 
             exact
