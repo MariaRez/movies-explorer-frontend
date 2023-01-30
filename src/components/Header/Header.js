@@ -44,13 +44,19 @@ function Header() {
             <>
               <Link
                 to="/movies"
-                className="header__link header__link_color_white header__link_hidden"
+                className={`header__link header__link_color_white header__link_hidden  ${
+                  location.pathname === "/movies" ? "header__link_checked" : ""
+                }`}
               >
                 Фильмы
               </Link>
               <Link
                 to="/saved-movies"
-                className="header__link header__link_right header__link_color_white header__link_hidden"
+                className={`header__link header__link_right header__link_color_white header__link_hidden  ${
+                  location.pathname === "/saved-movies"
+                    ? "header__link_checked"
+                    : ""
+                }`}
               >
                 Сохранённые фильмы
               </Link>

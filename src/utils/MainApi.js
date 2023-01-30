@@ -34,6 +34,49 @@ class MainApi {
       }),
     }).then(this._сheckServerResponseStatus);
   }
+
+  getUserMovies() {
+    return fetch(`${this._baseUrl}/movies`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+    }).then(this._сheckServerResponseStatus);
+  }
+
+  createMovie(data) {
+    return fetch(`${this._baseUrl}/movies`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        country: data.country,
+        director: data.director,
+        duration: data.duration,
+        year: data.year,
+        description: data.description,
+        image: data.image,
+        trailer: data.trailer,
+        thumbnail: data.thumbnail,
+        nameRU: data.nameRU,
+        nameEN: data.nameEN,
+        movieId: data.movieId,
+      }),
+    }).then(this._сheckServerResponseStatus);
+  }
+
+  deleteMovie(movieId) {
+    return fetch(`${this._baseUrl}/movies/${movieId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+    }).then(this._сheckServerResponseStatus);
+  }
 }
 
 export const mainApi = new MainApi({
