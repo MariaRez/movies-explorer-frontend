@@ -33,9 +33,9 @@ function App() {
   // ошибка над кнопками зарегистрироваться, войти и редактирование профиля
   const [errorMessage, setErrorMessage] = useState("");
 
-   //загрузка
-   const [isLoading, setIsLoading] = useState(false);
-  
+  //загрузка
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
     if (loggedIn) {
       Promise.all([mainApi.getUserInfo()])
@@ -76,7 +76,9 @@ function App() {
       .then(() => {
         setIsOpenInfoTooltip(true);
         setIsImageForInfoTooltip(success);
-        setIsTextForInfoTooltip("Регистрация прошла успешно! Добро пожаловать!");
+        setIsTextForInfoTooltip(
+          "Регистрация прошла успешно! Добро пожаловать!"
+        );
         handleLoginSubmit(email, password);
         setTimeout(() => {
           setIsOpenInfoTooltip(false);
@@ -86,10 +88,12 @@ function App() {
       .catch((err) => {
         if (err.includes(409)) {
           setErrorMessage("Пользователь с таким email уже существует");
-        } else if (err.includes(500)){
+        } else if (err.includes(500)) {
           setErrorMessage("Внутренняя ошибка сервера, попробуйте позднее.");
         } else {
-          setErrorMessage("Очень жаль, произошла ошибка при регистрации пользователя.");
+          setErrorMessage(
+            "Очень жаль, произошла ошибка при регистрации пользователя."
+          );
         }
       });
   }
@@ -110,10 +114,12 @@ function App() {
       })
       .then(() => history.push("/movies"))
       .catch((err) => {
-        if (err.includes(500)){
+        if (err.includes(500)) {
           setErrorMessage("Внутренняя ошибка сервера, попробуйте позднее.");
         } else {
-          setErrorMessage("Очень жаль, произошла ошибка при авторизации пользователя.");
+          setErrorMessage(
+            "Очень жаль, произошла ошибка при авторизации пользователя."
+          );
         }
       });
   }
@@ -143,10 +149,12 @@ function App() {
         }, 1500);
       })
       .catch((err) => {
-        if (err.includes(500)){
+        if (err.includes(500)) {
           setErrorMessage("Внутренняя ошибка сервера, попробуйте позднее.");
         } else {
-          setErrorMessage("Очень жаль, произошла ошибка при изменении данных пользователя.");
+          setErrorMessage(
+            "Очень жаль, произошла ошибка при изменении данных пользователя."
+          );
         }
       });
   }
@@ -158,6 +166,12 @@ function App() {
   }
   // функция поиска - необходимо написать - сейчас белеберда - только включаем загрузку
   function submitSearch() {
+    setIsLoading(true);
+    setTimeout(() => setIsLoading(false), 2000);
+  }
+
+  // функция поиска по сохраненным фильмам- необходимо написать
+  function submitSearchInSacedMovies() {
     setIsLoading(true);
     setTimeout(() => setIsLoading(false), 2000);
   }
@@ -177,23 +191,27 @@ function App() {
           <Route exact path="/">
             <Main />
           </Route>
-          <ProtectedRoute 
+          <ProtectedRoute
             exact
             path="/movies"
             loggedIn={loggedIn}
             component={Movies}
             sortingMovies={sortingMovies}
-             onSubmitSearch={submitSearch}
-             setPreloader={setIsLoading}
-             isLoading={isLoading}
+            onSubmitSearch={submitSearch}
+            setPreloader={setIsLoading}
+            isLoading={isLoading}
           />
-          <ProtectedRoute 
+          <ProtectedRoute
             exact
             path="/saved-movies"
             loggedIn={loggedIn}
             component={SavedMovies}
+            sortingMovies={sortingMovies}
+            onSubmitSearch={submitSearchInSacedMovies}
+            setPreloader={setIsLoading}
+            isLoading={isLoading}
           />
-          <ProtectedRoute 
+          <ProtectedRoute
             exact
             path="/profile"
             onUpdateUser={handleUpdateUser}
@@ -205,12 +223,14 @@ function App() {
           <Route exact path="/signin">
             <Login
               handleLogin={handleLoginSubmit}
-              errorMessage={errorMessage}/>
+              errorMessage={errorMessage}
+            />
           </Route>
           <Route exact path="/signup">
             <Register
               handleRegister={handleRegisterSubmit}
-              errorMessage={errorMessage}/>
+              errorMessage={errorMessage}
+            />
           </Route>
           <Route path="/*">
             <PageNotFound />
