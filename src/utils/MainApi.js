@@ -59,11 +59,11 @@ class MainApi {
         year: data.year,
         description: data.description,
         image: `https://api.nomoreparties.co${data.image.url}`,
-         trailer: data.trailer,
-         thumbnail: `https://api.nomoreparties.co${data.image.url}`,
-         nameRU: data.nameRU,
-         nameEN: data.nameEN,
-         movieId: data.movieId,
+        trailer: data.trailer,
+        thumbnail: `https://api.nomoreparties.co${data.image.url}`,
+        nameRU: data.nameRU,
+        nameEN: data.nameEN,
+        movieId: data.movieId,
       }),
     }).then(this._сheckServerResponseStatus);
   }

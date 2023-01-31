@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import SearchForm from "../SearchForm/SearchForm";
 import "./SavedMovies.css";
-import { savedMovies } from "../../utils/movies";
 import UserInformation from "../UserInformation/UserInformation";
 import nosmile from "../../images/nosmile.png";
 import Preloader from "../Preloader/Preloader";
@@ -12,6 +11,9 @@ function SavedMovies({
   onSubmitSearch,
   setPreloader,
   isLoading,
+  movies,
+  toggleLike,
+  filterStatus,
 }) {
   //состояние для хранения массива коротких фильмов
   const [shortMovies, setShortMovies] = useState([]);
@@ -20,7 +22,7 @@ function SavedMovies({
   // если есть чек на короткометражки, то установи массив коротких фильмов - отсортированные фильмы из App
   useEffect(() => {
     if (isChecked) {
-      setShortMovies(sortingMovies(savedMovies));
+      setShortMovies(sortingMovies(movies));
     }
   }, [isChecked]);
 
@@ -34,7 +36,7 @@ function SavedMovies({
       />
       {isLoading && <Preloader />}
       {/* добавить результат при не найденых результатах поиска */}
-      {isChecked && savedMovies.length !== 0 && shortMovies.length === 0 && (
+      {isChecked && movies.length !== 0 && shortMovies.length === 0 && (
         <UserInformation
           image={nosmile}
           title={"Короткометражных фильмов не найдено"}
@@ -43,10 +45,15 @@ function SavedMovies({
           }
         />
       )}
-      <MoviesCardList
-        // если чекбокс нажат, то пользователь получает массив короткометраженых фильмов, если нет, то полный массив найденных
-        movies={isChecked ? shortMovies : savedMovies}
-      />
+      {/* если массив не ноль, то отрисовывается массив фильмов */}
+      {movies.length !== 0 && (
+        <MoviesCardList
+          // если чекбокс нажат, то пользователь получает массив короткометраженых фильмов, если нет, то полный массив найденных
+          movies={isChecked ? shortMovies : movies}
+          toggleLike={toggleLike}
+          filterStatus={filterStatus}
+        />
+      )}
     </section>
   );
 }

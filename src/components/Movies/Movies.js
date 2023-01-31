@@ -3,11 +3,18 @@ import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import Preloader from "../Preloader/Preloader";
 import SearchForm from "../SearchForm/SearchForm";
 import "./Movies.css";
-import { movies } from "../../utils/movies";
 import UserInformation from "../UserInformation/UserInformation";
 import nosmile from "../../images/nosmile.png";
 
-function Movies({ sortingMovies, onSubmitSearch, setPreloader, isLoading }) {
+function Movies({
+  sortingMovies,
+  onSubmitSearch,
+  setPreloader,
+  isLoading,
+  movies,
+  toggleLike,
+  filterStatus,
+}) {
   //состояние для хранения массива коротких фильмов
   const [shortMovies, setShortMovies] = useState([]);
   //состояние чек-бокса для фильтрации
@@ -38,10 +45,15 @@ function Movies({ sortingMovies, onSubmitSearch, setPreloader, isLoading }) {
           }
         />
       )}
-      <MoviesCardList
-        // если чекбокс нажат, то пользователь получает массив короткометраженых фильмов, если нет, то полный массив найденных
-        movies={isChecked ? shortMovies : movies}
-      />
+      {/* если массив не ноль, то отрисовывается массив фильмов */}
+      {movies.length !== 0 && (
+        <MoviesCardList
+          // если чекбокс нажат, то пользователь получает массив короткометраженых фильмов, если нет, то полный массив найденных
+          movies={isChecked ? shortMovies : movies}
+          toggleLike={toggleLike}
+          filterStatus={filterStatus}
+        />
+      )}
     </section>
   );
 }
