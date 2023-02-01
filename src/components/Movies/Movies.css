@@ -4,3 +4,24 @@
     flex-direction: column;
     align-items: center;
 }
+
+
+.movies {
+    width: 100%;
+    padding-bottom: 247px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+@media (max-width: 1279px) {
+    .movies {
+        padding-bottom: 170px;
+    }
+}
+
+@media (max-width: 767px) {
+    .movies {
+        padding-bottom: 166px;
+    }
+}

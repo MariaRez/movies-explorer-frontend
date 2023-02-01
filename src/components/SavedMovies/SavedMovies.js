@@ -34,7 +34,7 @@ function SavedMovies({
         setPreloader={setPreloader}
         isLoading={isLoading}
       />
-      {isLoading ? (
+       {isLoading ? (
         <Preloader />
       ) : (
         <>
@@ -42,8 +42,8 @@ function SavedMovies({
           {!isChecked && movies.length === 0 ? (
             <UserInformation
               image={nosmile}
-              title={"К сожалению, под ваш запрос не удалось найти фильмы"}
-              description={"Попробуйте изменить запрос"}
+              title={"К сожалению вы не сохранили еще фильмы или же под ваш запрос нет подходящих"}
+              description={"Вернитесь на страницу с фильмами и лайкните понравившиеся - они появятся здесь!"}
             />
           ) : (
             <>
