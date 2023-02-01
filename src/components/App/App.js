@@ -37,11 +37,10 @@ function App() {
   useEffect(() => {
     if (loggedIn) {
       // если залогинен, то дай информацию о пользвателе и его сохраненные фильмы
-      Promise.all([mainApi.getUserInfo(), mainApi.getUserMovies])
-        .then(([userInfo, favoriteMovies]) => {
+      Promise.all([mainApi.getUserInfo()])
+        .then(([userInfo]) => {
           // установи как текущие данные пользователя и его сохраненные фильмы
           setCurrentUser(userInfo.data);
-          setIsFavoriteMovies(favoriteMovies.data);
         })
         .catch((err) => {
           console.log(err);
@@ -185,9 +184,7 @@ function App() {
     if (keyword) {
       keyword = keyword.toLowerCase();
       result = data.filter(data => {
-        const ru = data.nameRU.toLowerCase();
-        const en = data.nameEN.toLowerCase();
-        return (ru.includes(keyword) || en.includes(keyword)) 
+        return (data.nameRU.toLowerCase().includes(keyword) || data.nameEN.toLowerCase().includes(keyword)) 
       });
     } else {
       result = [];

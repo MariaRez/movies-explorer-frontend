@@ -15,8 +15,8 @@ function MoviesCard({ movie, filterStatus, onLikeClick }) {
   }
   return (
     <div className="card">
-      <a href={movie.trailer} target="_blank" rel="noreferrer">
-        <img className="card__image" src={movie.image} alt={movie.nameRU} />
+      <a href={movie.trailerLink} target="_blank" rel="noreferrer">
+        <img className="card__image" src={`https://api.nomoreparties.co/${movie.image.url}`} alt={movie.nameRU} />
       </a>
       {/* картинка фильма является ссылкой для перехода на трейлер фильма */}
       <div className="card__container">

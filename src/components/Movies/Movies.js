@@ -34,25 +34,56 @@ function Movies({
         setPreloader={setPreloader}
         isLoading={isLoading}
       />
-      {isLoading && <Preloader />}
-      {/* добавить результат при не найденых результатах поиска */}
-      {isChecked && movies.length !== 0 && shortMovies.length === 0 && (
-        <UserInformation
-          image={nosmile}
-          title={"Короткометражных фильмов не найдено"}
-          description={
-            "Переключите чекбокс и продолжайте наслаждаться фильмами"
-          }
-        />
-      )}
-      {/* если массив не ноль, то отрисовывается массив фильмов */}
-      {movies.length !== 0 && (
-        <MoviesCardList
-          // если чекбокс нажат, то пользователь получает массив короткометраженых фильмов, если нет, то полный массив найденных
-          movies={isChecked ? shortMovies : movies}
-          toggleLike={toggleLike}
-          filterStatus={filterStatus}
-        />
+      {isLoading ? (
+        <Preloader />
+      ) : (
+        <>
+          {/* если массив найденых фильмов равен 0 */}
+          {!isChecked && movies.length === 0 ? (
+            <UserInformation
+              image={nosmile}
+              title={"К сожалению, под ваш запрос не удалось найти фильмы"}
+              description={"Попробуйте изменить запрос"}
+            />
+          ) : (
+            <>
+              {/* если среди найденых фильмов нет короткометраженых */}
+              {isChecked && movies.length !== 0 && shortMovies.length === 0 ? (
+                <UserInformation
+                  image={nosmile}
+                  title={"Короткометражные фильмы не найдены"}
+                  description={
+                    "Переключите обратно чек-бокс и продолжайте наслаждаться фильмами"
+                  }
+                />
+              ) : (
+                <>
+                  {/* если не найдены фильмы и нажать на кнопку короткометраженых */}
+                  {isChecked &&
+                  movies.length === 0 &&
+                  shortMovies.length === 0 ? (
+                    <UserInformation
+                      image={nosmile}
+                      title={
+                        "Мы не можем найти короткометражные фильмы, если под основной запрос фильмы были не найдены"
+                      }
+                      description={
+                        "Очень жаль! Переключите обратно чек-бокс и уточните поисковый запрос"
+                      }
+                    />
+                  ) : (
+                    <MoviesCardList
+                      // если чекбокс нажат, то пользователь получает массив короткометраженых фильмов, если нет, то полный массив найденных
+                      movies={isChecked ? shortMovies : movies}
+                      toggleLike={toggleLike}
+                      filterStatus={filterStatus}
+                    />
+                  )}
+                </>
+              )}
+            </>
+          )}
+        </>
       )}
     </section>
   );
