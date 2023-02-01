@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import { getTimeFromMins } from "../../utils/secondaryFunctions";
 import "./MoviesCard.css";
 
-function MoviesCard({ movie, filterStatus, onLikeClick }) {
+function MoviesCard({ movie, toggleLike, filterStatus  }) {
   const location = useLocation();
   const isLiked = filterStatus(movie);
   const cardLikeButtonClassName = `card__like ${
@@ -11,7 +11,7 @@ function MoviesCard({ movie, filterStatus, onLikeClick }) {
   }`;
 
   function handleClick() {
-    onLikeClick(movie, isLiked);
+    toggleLike(movie, isLiked);
   }
   return (
     <div className="card">

@@ -59,7 +59,7 @@ class MainApi {
         year: data.year,
         description: data.description,
         image: `https://api.nomoreparties.co${data.image.url}`,
-        trailer: data.trailer,
+        trailerLink: data.trailerLink,
         thumbnail: `https://api.nomoreparties.co${data.image.url}`,
         nameRU: data.nameRU,
         nameEN: data.nameEN,

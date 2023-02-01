@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import { defineListDisplay } from "../../utils/secondaryFunctions";
 import MoviesCard from "../MoviesCard/MoviesCard";
 import "./MoviesCardList.css";
 
@@ -55,7 +53,7 @@ function MoviesCardList({
             <MoviesCard
               key={movie.id || movie.movieId}
               movie={movie}
-              onLikeClick={toggleLike}
+              toggleLike={toggleLike}
               filterStatus={filterStatus}
             />
           ))}
