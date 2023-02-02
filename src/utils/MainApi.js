@@ -63,13 +63,13 @@ class MainApi {
         thumbnail: `https://api.nomoreparties.co${data.image.url}`,
         nameRU: data.nameRU,
         nameEN: data.nameEN,
-        movieId: data.movieId,
+        movieId: data.id,
       }),
     }).then(this._сheckServerResponseStatus);
   }
 
-  deleteMovie(movieId) {
-    return fetch(`${this._baseUrl}/movies/${movieId}`, {
+  deleteMovie(id) {
+    return fetch(`${this._baseUrl}/movies/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,

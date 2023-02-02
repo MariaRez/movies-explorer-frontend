@@ -2,11 +2,7 @@ import React, { useEffect, useState } from "react";
 import MoviesCard from "../MoviesCard/MoviesCard";
 import "./MoviesCardList.css";
 
-function MoviesCardList({
-  movies,
-  toggleLike,
-  filterStatus,
-}) {
+function MoviesCardList({ movies, isLiked, handleLike, handleDislike }) {
 
   const [width, setWidth] = useState(0);   // ширина
   const [amount, setAmount] = useState(0); // счетчик
@@ -51,10 +47,11 @@ function MoviesCardList({
       <ul className="movies-card-list__movies">
         {part.map((movie) => (
             <MoviesCard
-              key={movie.id || movie.movieId}
+              key={movie._id || movie.id}
               movie={movie}
-              toggleLike={toggleLike}
-              filterStatus={filterStatus}
+              handleLike={handleLike}
+              handleDislike={handleDislike}
+              isLiked={isLiked}
             />
           ))}
       </ul>

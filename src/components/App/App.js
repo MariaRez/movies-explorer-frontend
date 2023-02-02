@@ -36,11 +36,10 @@ function App() {
 
   useEffect(() => {
     if (loggedIn) {
-      // если залогинен, то дай информацию о пользвателе и его сохраненные фильмы
-      Promise.all([mainApi.getUserInfo()])
-        .then(([userInfo]) => {
-          // установи как текущие данные пользователя и его сохраненные фильмы
+      Promise.all([mainApi.getUserInfo(), mainApi.getUserMovies()])
+        .then(([userInfo, favoriteMovies]) => {
           setCurrentUser(userInfo.data);
+          setIsFavoriteMovies(favoriteMovies.data);
         })
         .catch((err) => {
           console.log(err);
@@ -165,17 +164,6 @@ function App() {
       })
       .catch((err) => {
         console.log(err);
-      })
-  }
-  // получение сохраненных фильмов
-  function getFavoriteMovies() {
-    mainApi
-      .getUserMovies() // получаем от нашего айпи
-      .then((data) => {
-        setIsFavoriteMovies(data);
-      })
-      .catch((err) => {
-        console.log(err);
       });
   }
   // поиск на основании имени названия фильма и включает ли он переданные ключевые слова
@@ -183,8 +171,11 @@ function App() {
     let result = data;
     if (keyword) {
       keyword = keyword.toLowerCase();
-      result = data.filter(data => {
-        return (data.nameRU.toLowerCase().includes(keyword) || data.nameEN.toLowerCase().includes(keyword)) 
+      result = data.filter((data) => {
+        return (
+          data.nameRU.toLowerCase().includes(keyword) ||
+          data.nameEN.toLowerCase().includes(keyword)
+        );
       });
     } else {
       result = [];
@@ -201,7 +192,6 @@ function App() {
     getBeatMovies();
     setTimeout(() => setIsLoading(false), 2000); // для отображения
     setSearchedMovies(search(beatFilmMovies, keyword));
-    console.log(searchedMovies);
     localStorage.setItem(
       "searchResult",
       JSON.stringify(search(beatFilmMovies, keyword))
@@ -212,40 +202,40 @@ function App() {
     setTimeout(() => setIsLoading(false), 2000); // для отображения
     setIsFavoriteMovies(search(favoriteMovies, keyword));
   }
-  // функция добавления фильмов - создания их в сохраненных
-  function handleMovieLike(movie) {
-    mainApi
-      .createMovie(movie)
+
+  // функция сохранения фильма в сохраненные
+  const handleLikeClick = (movie) => {
+    const like = favoriteMovies.some((i) => i.movieId === movie.id);
+    if (!like) {
+      mainApi.createMovie(movie)
       .then((res) => {
-        const newSavedMovie = res.newMovie;
-        setIsFavoriteMovies([...favoriteMovies, newSavedMovie]);
-        console.log(res.message);
-      })
-      .catch((err) => console.log(err));
-  }
-  // удаление - из сохраненных
-  function handleMovieDelete(movie) {
-    const movieId = favoriteMovies.find(
-      (item) => item.movieId === movie.movieId
-    )._id;
+        setIsFavoriteMovies([...favoriteMovies, res]);
+      });
+    } else {
+      const dislike = favoriteMovies.find((i) => i.movieId === movie.id);
+      handleDislikeClick(dislike);
+    }
+  };
+
+    // функция удаления фильма из сохраненных
+  function handleDislikeClick(movie) {
     mainApi
-      .deleteMovie(movieId)
-      .then((res) => {
-        getFavoriteMovies();
-        console.log(res.message);
+      .deleteMovie(movie._id)
+      .then(() => {
+        setIsFavoriteMovies(favoriteMovies.filter(
+          (data) => data._id !== movie._id
+        ));
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
-  function filterStatus(movie) {
+  const isLiked = (data) => {
     return favoriteMovies.some(
-      (savedMovie) => savedMovie.movieId === movie.movieId
+      (i) => i.movieId === data.id && i.owner === currentUser?._id
     );
-  }
-
-  function toggleLike(movie, isLiked) {
-    isLiked ? handleMovieDelete(movie) : handleMovieLike(movie);
-  }
+  };
 
   useEffect(() => {
     const movies = JSON.parse(localStorage.getItem("movies"));
@@ -285,8 +275,9 @@ function App() {
             setPreloader={setIsLoading}
             isLoading={isLoading}
             movies={searchedMovies}
-            toggleLike={toggleLike}
-            filterStatus={filterStatus}
+            handleLike={handleLikeClick}
+            handleDislike={handleDislikeClick}
+            isLiked={isLiked}
           />
           <ProtectedRoute
             exact
@@ -298,8 +289,9 @@ function App() {
             setPreloader={setIsLoading}
             isLoading={isLoading}
             movies={favoriteMovies}
-            toggleLike={toggleLike}
-            filterStatus={filterStatus}
+            handleLike={handleLikeClick}
+            handleDislike={handleDislikeClick}
+            isLiked={isLiked}
           />
           <ProtectedRoute
             exact

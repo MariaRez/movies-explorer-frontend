@@ -12,8 +12,9 @@ function Movies({
   setPreloader,
   isLoading,
   movies,
-  toggleLike,
-  filterStatus,
+  isLiked,
+  handleLike,
+  handleDislike
 }) {
   //состояние для хранения массива коротких фильмов
   const [shortMovies, setShortMovies] = useState([]);
@@ -75,8 +76,9 @@ function Movies({
                     <MoviesCardList
                       // если чекбокс нажат, то пользователь получает массив короткометраженых фильмов, если нет, то полный массив найденных
                       movies={isChecked ? shortMovies : movies}
-                      toggleLike={toggleLike}
-                      filterStatus={filterStatus}
+                      handleLike={handleLike}
+                      handleDislike={handleDislike}
+                      isLiked={isLiked}
                     />
                   )}
                 </>
