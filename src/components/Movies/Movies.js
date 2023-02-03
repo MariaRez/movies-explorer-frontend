@@ -5,6 +5,7 @@ import SearchForm from "../SearchForm/SearchForm";
 import "./Movies.css";
 import UserInformation from "../UserInformation/UserInformation";
 import nosmile from "../../images/nosmile.png";
+import smile from "../../images/smile.png";
 
 function Movies({
   sortingMovies,
@@ -14,7 +15,8 @@ function Movies({
   movies,
   isLiked,
   handleLike,
-  handleDislike
+  handleDislike,
+  searchResult,
 }) {
   //состояние для хранения массива коротких фильмов
   const [shortMovies, setShortMovies] = useState([]);
@@ -39,51 +41,28 @@ function Movies({
         <Preloader />
       ) : (
         <>
-          {/* если массив найденых фильмов равен 0 */}
-          {!isChecked && movies.length === 0 ? (
+          {searchResult
+            ? movies.length === 0 && (
+                <UserInformation image={nosmile} title={searchResult} />
+              )
+            : movies.length === 0 && (
+                <UserInformation image={smile} title={"Введите ключевое слово"} />
+              )}
+
+          {isChecked && movies.length !== 0 && shortMovies.length === 0 && (
             <UserInformation
               image={nosmile}
-              title={"К сожалению, под ваш запрос не удалось найти фильмы"}
-              description={"Попробуйте изменить запрос"}
+              title={"Короткометражные фильмы не найдены"}
             />
-          ) : (
-            <>
-              {/* если среди найденых фильмов нет короткометраженых */}
-              {isChecked && movies.length !== 0 && shortMovies.length === 0 ? (
-                <UserInformation
-                  image={nosmile}
-                  title={"Короткометражные фильмы не найдены"}
-                  description={
-                    "Переключите обратно чек-бокс и продолжайте наслаждаться фильмами"
-                  }
-                />
-              ) : (
-                <>
-                  {/* если не найдены фильмы и нажать на кнопку короткометраженых */}
-                  {isChecked &&
-                  movies.length === 0 &&
-                  shortMovies.length === 0 ? (
-                    <UserInformation
-                      image={nosmile}
-                      title={
-                        "Мы не можем найти короткометражные фильмы, если под основной запрос фильмы были не найдены"
-                      }
-                      description={
-                        "Очень жаль! Переключите обратно чек-бокс и уточните поисковый запрос"
-                      }
-                    />
-                  ) : (
-                    <MoviesCardList
-                      // если чекбокс нажат, то пользователь получает массив короткометраженых фильмов, если нет, то полный массив найденных
-                      movies={isChecked ? shortMovies : movies}
-                      handleLike={handleLike}
-                      handleDislike={handleDislike}
-                      isLiked={isLiked}
-                    />
-                  )}
-                </>
-              )}
-            </>
+          )}
+
+          {movies.length !== 0 && (
+            <MoviesCardList
+              movies={isChecked ? shortMovies : movies}
+              handleLike={handleLike}
+              handleDislike={handleDislike}
+              isLiked={isLiked}
+            />
           )}
         </>
       )}

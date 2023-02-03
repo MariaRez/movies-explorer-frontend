@@ -12,10 +12,12 @@ import SavedMovies from "../SavedMovies/SavedMovies";
 import Header from "../Header/Header";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
-import { auth } from "../../utils/auth";
 import InfoTooltip from "../InfoTooltip/InfoTooltip";
 
 import success from "../../images/success.svg";
+import wrong from "../../images/wrong.svg";
+
+import { auth } from "../../utils/auth";
 import { mainApi } from "../../utils/MainApi";
 import { moviesApi } from "../../utils/MoviesApi";
 
@@ -33,6 +35,7 @@ function App() {
   const [beatFilmMovies, setBeatFilmMovies] = useState([]); // массив фильмов, полученных со стороннего ресурса
   const [searchedMovies, setSearchedMovies] = useState([]); // массив искомых фильмов в результате поиска
   const [favoriteMovies, setIsFavoriteMovies] = useState([]); // массив сохраненных фильмов пользователя
+  const [searchResult, setSearchResult] = useState(""); // результат поиска
 
   useEffect(() => {
     if (loggedIn) {
@@ -42,7 +45,13 @@ function App() {
           setIsFavoriteMovies(favoriteMovies.data);
         })
         .catch((err) => {
-          console.log(err);
+          setSearchResult("Произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз");
+          setIsOpenInfoTooltip(true);
+          setIsImageForInfoTooltip(wrong);
+          setIsTextForInfoTooltip(err);
+          setTimeout(() => {
+            setIsOpenInfoTooltip(false);
+          }, 2000);
         });
     }
   }, [loggedIn]);
@@ -71,11 +80,6 @@ function App() {
     auth
       .register(name, email, password)
       .then(() => {
-        setIsOpenInfoTooltip(true);
-        setIsImageForInfoTooltip(success);
-        setIsTextForInfoTooltip(
-          "Регистрация прошла успешно! Добро пожаловать!"
-        );
         handleLoginSubmit(email, password);
         setTimeout(() => {
           setIsOpenInfoTooltip(false);
@@ -103,10 +107,10 @@ function App() {
         setLoggedIn(true);
         setIsOpenInfoTooltip(true);
         setIsImageForInfoTooltip(success);
-        setIsTextForInfoTooltip("Рады снова видеть!");
+        setIsTextForInfoTooltip("Добро пожаловать!");
         setTimeout(() => {
           setIsOpenInfoTooltip(false);
-        }, 1500);
+        }, 2000);
       })
       .then(() => history.push("/movies"))
       .catch((err) => {
@@ -145,6 +149,12 @@ function App() {
   // выход из аккаунта
   function handleExitSubmit() {
     localStorage.removeItem("token"); // удаляем токен
+    localStorage.removeItem("searchResult");
+    localStorage.removeItem("movies");
+    setBeatFilmMovies([]); // нет массива фильмов со стороннего ресурса
+    setIsFavoriteMovies([]); // нет массива любимых фильмов
+    setSearchedMovies([]); // нет найдены фильмов
+    setSearchResult(""); // нет поискового результата
     setLoggedIn(false); // не залогинен
     history.push("/"); // отправляем на главную страницу
     setCurrentUser({});
@@ -163,7 +173,13 @@ function App() {
         setIsLoading(false);
       })
       .catch((err) => {
-        console.log(err);
+        setSearchResult("Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз")
+        setIsOpenInfoTooltip(true);
+        setIsImageForInfoTooltip(wrong);
+        setIsTextForInfoTooltip(err);
+        setTimeout(() => {
+          setIsOpenInfoTooltip(false);
+        }, 1500);
       });
   }
   // поиск на основании имени названия фильма и включает ли он переданные ключевые слова
@@ -176,9 +192,10 @@ function App() {
           data.nameRU.toLowerCase().includes(keyword) ||
           data.nameEN.toLowerCase().includes(keyword)
         );
-      });
-    } else {
-      result = [];
+      }); 
+      if (result.length === 0) {
+        setSearchResult("Ничего не найдено");
+      }
     }
     return result;
   }
@@ -278,6 +295,7 @@ function App() {
             handleLike={handleLikeClick}
             handleDislike={handleDislikeClick}
             isLiked={isLiked}
+            searchResult={searchResult}
           />
           <ProtectedRoute
             exact
@@ -292,6 +310,7 @@ function App() {
             handleLike={handleLikeClick}
             handleDislike={handleDislikeClick}
             isLiked={isLiked}
+            searchResult={searchResult}
           />
           <ProtectedRoute
             exact
