@@ -46,7 +46,7 @@ function SavedMovies({
                 <UserInformation image={nosmile} title={searchResult} />
               )
             : movies.length === 0 && (
-                <UserInformation image={smile} title={"Введите ключевое слово"} />
+                <UserInformation image={smile} title={"Введите поисковый запрос"} />
               )}
 
           {isChecked && movies.length !== 0 && shortMovies.length === 0 && (

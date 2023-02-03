@@ -37,44 +37,6 @@ function App() {
   const [favoriteMovies, setIsFavoriteMovies] = useState([]); // массив сохраненных фильмов пользователя
   const [searchResult, setSearchResult] = useState(""); // результат поиска
 
-  useEffect(() => {
-    if (loggedIn) {
-      Promise.all([mainApi.getUserInfo(), mainApi.getUserMovies()])
-        .then(([userInfo, favoriteMovies]) => {
-          setCurrentUser(userInfo.data);
-          setIsFavoriteMovies(favoriteMovies.data);
-        })
-        .catch((err) => {
-          setSearchResult("Произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз");
-          setIsOpenInfoTooltip(true);
-          setIsImageForInfoTooltip(wrong);
-          setIsTextForInfoTooltip(err);
-          setTimeout(() => {
-            setIsOpenInfoTooltip(false);
-          }, 2000);
-        });
-    }
-  }, [loggedIn]);
-
-  useEffect(() => {
-    checkToken();
-  }, []);
-  // проверка токена
-  function checkToken() {
-    const token = localStorage.getItem("token");
-    const path = location.pathname; // в какой локации мы находились
-    if (token) {
-      auth
-        .checkToken(token)
-        .then(() => {
-          setLoggedIn(true);
-          history.push(path); //туда и отправляет
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }
   // регистрация нового пользователя
   function handleRegisterSubmit(name, email, password) {
     auth
@@ -148,16 +110,8 @@ function App() {
   }
   // выход из аккаунта
   function handleExitSubmit() {
-    localStorage.removeItem("token"); // удаляем токен
-    localStorage.removeItem("searchResult");
-    localStorage.removeItem("movies");
-    setBeatFilmMovies([]); // нет массива фильмов со стороннего ресурса
-    setIsFavoriteMovies([]); // нет массива любимых фильмов
-    setSearchedMovies([]); // нет найдены фильмов
-    setSearchResult(""); // нет поискового результата
-    setLoggedIn(false); // не залогинен
+    localStorage.clear();
     history.push("/"); // отправляем на главную страницу
-    setCurrentUser({});
   }
   // исчезнование компонента с подсказкой
   function closeInfoTooltip() {
@@ -226,11 +180,13 @@ function App() {
     if (!like) {
       mainApi.createMovie(movie)
       .then((res) => {
-        setIsFavoriteMovies([...favoriteMovies, res]);
-      });
-    } else {
-      const dislike = favoriteMovies.find((i) => i.movieId === movie.id);
-      handleDislikeClick(dislike);
+    setIsFavoriteMovies([res, ...favoriteMovies]);
+    })
+    .catch((err) => {
+      setIsOpenInfoTooltip(true);
+      setIsImageForInfoTooltip(wrong);
+      setIsTextForInfoTooltip(`Упс! ${err}`);
+    });
     }
   };
 
@@ -244,7 +200,9 @@ function App() {
         ));
       })
       .catch((err) => {
-        console.log(err);
+        setIsOpenInfoTooltip(true);
+        setIsImageForInfoTooltip(wrong);
+        setIsTextForInfoTooltip(`Упс! ${err}`);
       });
   }
 
@@ -253,6 +211,45 @@ function App() {
       (i) => i.movieId === data.id && i.owner === currentUser?._id
     );
   };
+
+  useEffect(() => {
+    checkToken();
+  }, []);
+  // проверка токена
+  function checkToken() {
+    const token = localStorage.getItem("token");
+    const path = location.pathname; // в какой локации мы находились
+    if (token) {
+      auth
+        .checkToken(token)
+        .then(() => {
+          setLoggedIn(true);
+          history.push(path); //туда и отправляет
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }
+
+  useEffect(() => {
+    if (loggedIn) {
+      Promise.all([mainApi.getUserInfo(), mainApi.getUserMovies()])
+        .then(([userInfo, favoriteMovies]) => {
+          setCurrentUser(userInfo.data);
+          setIsFavoriteMovies(favoriteMovies.data);
+        })
+        .catch((err) => {
+          setSearchResult("Произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз");
+          setIsOpenInfoTooltip(true);
+          setIsImageForInfoTooltip(wrong);
+          setIsTextForInfoTooltip(err);
+          setTimeout(() => {
+            setIsOpenInfoTooltip(false);
+          }, 2000);
+        });
+    }
+  }, [loggedIn]);
 
   useEffect(() => {
     const movies = JSON.parse(localStorage.getItem("movies"));
