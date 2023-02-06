@@ -168,8 +168,16 @@ function App() {
   }
   // выход из аккаунта
   function handleExitSubmit() {
-    localStorage.clear();
-    history.push("/"); // отправляем на главную страницу
+    localStorage.removeItem("token"); // удаляем токен
+     localStorage.removeItem("searchResult");
+     localStorage.removeItem("movies");
+     setBeatFilmMovies([]); // нет массива фильмов со стороннего ресурса
+     setIsFavoriteMovies([]); // нет массива любимых фильмов
+     setSearchedMovies([]); // нет найдены фильмов
+     setSearchResult(""); // нет поискового результата
+     setLoggedIn(false); // не залогинен
+     history.push("/"); // отправляем на главную страницу
+     setCurrentUser({});
   }
   // исчезнование компонента с подсказкой
   function closeInfoTooltip() {
