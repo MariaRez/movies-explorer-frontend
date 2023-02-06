@@ -6,6 +6,10 @@ import UserInformation from "../UserInformation/UserInformation";
 import nosmile from "../../images/nosmile.png";
 import smile from "../../images/smile.png";
 import Preloader from "../Preloader/Preloader";
+import {
+  NOT_FOUND_SHORT_SEARCH_MESSAGE,
+  START_SEARCH,
+} from "../../utils/constants";
 
 function SavedMovies({
   sortingMovies,
@@ -16,7 +20,7 @@ function SavedMovies({
   isLiked,
   handleLike,
   handleDislike,
-  searchResult
+  searchResult,
 }) {
   //состояние для хранения массива коротких фильмов
   const [shortMovies, setShortMovies] = useState([]);
@@ -27,6 +31,7 @@ function SavedMovies({
     if (isChecked) {
       setShortMovies(sortingMovies(movies));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isChecked]);
 
   return (
@@ -37,7 +42,7 @@ function SavedMovies({
         setPreloader={setPreloader}
         isLoading={isLoading}
       />
-   {isLoading ? (
+      {isLoading ? (
         <Preloader />
       ) : (
         <>
@@ -46,13 +51,13 @@ function SavedMovies({
                 <UserInformation image={nosmile} title={searchResult} />
               )
             : movies.length === 0 && (
-                <UserInformation image={smile} title={"Введите поисковый запрос"} />
+                <UserInformation image={smile} title={START_SEARCH} />
               )}
 
           {isChecked && movies.length !== 0 && shortMovies.length === 0 && (
             <UserInformation
               image={nosmile}
-              title={"Короткометражные фильмы не найдены"}
+              title={NOT_FOUND_SHORT_SEARCH_MESSAGE}
             />
           )}
 
