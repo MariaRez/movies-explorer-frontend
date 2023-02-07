@@ -249,7 +249,7 @@ function App() {
       mainApi
         .createMovie(movie)
         .then((res) => {
-          setIsFavoriteMovies([res, ...favoriteMovies]);
+          setIsFavoriteMovies(movies => [...movies, res.data])
         })
         .catch((err) => {
           setIsOpenInfoTooltip(true);

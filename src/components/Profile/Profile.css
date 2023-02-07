@@ -81,8 +81,8 @@
 }
 
 .profile__error-server {
-    margin: 161px 0 0;
-    height: 35px;
+    margin: 96px 0 0;
+    height: 100px;
     text-align: center;
     font-style: normal;
     font-weight: 500;
@@ -136,7 +136,7 @@
     }
 
     .profile__error-server {
-        margin: 149px 0 0;
+        margin: 84px 0 0;
     }
 }
 
@@ -154,6 +154,6 @@
     }
 
     .profile__error-server {
-        margin: 320px 0 0;
+        margin: 255px 0 0;
     }
 }
