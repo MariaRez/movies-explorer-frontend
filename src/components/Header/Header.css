@@ -87,7 +87,6 @@
     height: 44px;
     opacity: 1;
     background-image: url(/src/images/burger.svg);
-    background-color: #202020;
     background-repeat: no-repeat;
     background-position: center;
     border: none;
@@ -98,6 +97,14 @@
 
 .header__burger-menu:hover {
     opacity: 0.6;
+}
+
+.header__burger-menu_color_emerald {
+    background-color: #073042;
+}
+
+.header__burger-menu_color_dark {
+    background-color: #202020; 
 }
 
 @media (max-width: 769px) {

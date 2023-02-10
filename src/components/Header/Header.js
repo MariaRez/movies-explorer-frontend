@@ -6,12 +6,17 @@ import profile from "../../images/profile.svg";
 import { Link, useLocation } from "react-router-dom";
 import Navigation from "../Navigation/Navigation";
 
-function Header() {
+function Header({ loggedIn }) {
   const [isOpenBurgerMenu, setIsOpenBurgerMenu] = useState(false);
 
   const location = useLocation();
+
   const headerClassName = `header ${
     location.pathname === "/" ? "header_color_emerald" : "header_color_dark"
+  }`;
+
+  const burgerMenuClassName = `header__burger-menu ${
+    location.pathname === "/" ? "header__burger-menu_color_emerald" : "header__burger-menu_color_dark"
   }`;
 
   function handleBurgerMenuButton() {
@@ -25,8 +30,9 @@ function Header() {
           <img className="logo" src={logo} alt="Логотоп" />
         </Link>
         <div className="header__links">
-          {location.pathname === "/" ? ( // для главной страницы
+          {!loggedIn ? (
             <>
+              {/* если не залогинен */}
               <Link
                 to="/signup"
                 className="header__link header__link_color_white"
@@ -39,9 +45,10 @@ function Header() {
               >
                 Войти
               </Link>
-            </> // для иных на которых есть header
+            </>
           ) : (
             <>
+              {/* если залонинен */}
               <Link
                 to="/movies"
                 className={`header__link header__link_color_white header__link_hidden  ${
@@ -69,7 +76,7 @@ function Header() {
               </Link>
               <button
                 aria-label="Open navigation"
-                className="header__burger-menu"
+                className={burgerMenuClassName}
                 type="button"
                 onClick={handleBurgerMenuButton}
               />

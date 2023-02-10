@@ -288,7 +288,9 @@ function App() {
         location.pathname === "/movies" ||
         location.pathname === "/saved-movies" ||
         location.pathname === "/profile" ? (
-          <Header />
+          <Header
+            loggedIn={loggedIn}
+          />
         ) : (
           ""
         )}

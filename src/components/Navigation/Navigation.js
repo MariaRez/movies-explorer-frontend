@@ -5,6 +5,10 @@ import "./Navigation.css";
 
 function Navigation({ handleBurgerMenuButton }) {
   const location = useLocation();
+
+  const navigationClassName = `navigation ${
+    location.pathname === "/" ? "navigation_color_emerald" : "navigation_color_dark"
+  }`;
   
   function defineLinkClass(path) {
     let linkClassName = `navigation__link  ${location.pathname === path ? "navigation__link_checked" : ""}`;
@@ -12,7 +16,7 @@ function Navigation({ handleBurgerMenuButton }) {
   } 
 
   return (
-    <section className="navigation">
+    <section className={navigationClassName}>
       <p className="navigation__overlay" />
       <button
         aria-label="Close navigation"
