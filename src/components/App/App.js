@@ -110,6 +110,7 @@ function App() {
       .register(name, email, password)
       .then(() => {
         handleLoginSubmit(email, password);
+        setErrorMessage("");
       })
       .then(() => history.push("/movies"))
       .catch((err) => {
@@ -154,6 +155,7 @@ function App() {
         setIsOpenInfoTooltip(true);
         setIsImageForInfoTooltip(success);
         setIsTextForInfoTooltip(SUCCESSFUL_UPDATE_MESSAGE);
+        setErrorMessage("");
         setTimeout(() => {
           setIsOpenInfoTooltip(false);
         }, 1500);

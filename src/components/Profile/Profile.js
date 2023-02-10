@@ -6,7 +6,8 @@ import "./Profile.css";
 function Profile({ onUpdateUser, handleExit, errorMessage }) {
   const currentUser = useContext(CurrentUserContext);
   const { values, handleChange, errors, isValid, resetForm } = useFormWithValidation();
-  const submitButtonClassName = `form__button form__button_type_change ${!isValid && "form__button_disabled"}`;
+  const checkValid = (!isValid || (currentUser.name === values.name && currentUser.email === values.email));
+  const submitButtonClassName = `form__button form__button_type_change ${checkValid ? "form__button_disabled": ""}`;
 
    useEffect(() => {
     resetForm(currentUser, "", false);
@@ -52,6 +53,7 @@ function Profile({ onUpdateUser, handleExit, errorMessage }) {
             type="email"
             name="email"
             id="email"
+            pattern="^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$"
             required
             minLength="2"
             placeholder="Ваша новая почта"
@@ -65,7 +67,7 @@ function Profile({ onUpdateUser, handleExit, errorMessage }) {
           className={submitButtonClassName}
           type="submit"
           aria-label="Change data"
-          disabled={!isValid}>
+          disabled={checkValid ? true : false}>
             Редактировать
         </button>
       </form>

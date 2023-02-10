@@ -57,6 +57,7 @@ function Register({ handleRegister, errorMessage, isActive }) {
               type="email"
               name="email"
               id="email"
+              pattern="^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$"
               required
               placeholder="Ваша почта"
               value={values.email || ""} //значение почты или пустая строка
