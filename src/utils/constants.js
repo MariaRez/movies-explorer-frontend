@@ -3,6 +3,7 @@ export const CONFLICT_ERROR = 409;
 export const INTERNAL_SERVER_ERROR = 500;
 // текстовые сообшения
 export const CONFLICT_MESSAGE = "Пользователь с таким email уже существует";
+export const CONFLICT_MESSAGE_LIKE = "Нет прав для проставления лайка понравившемуся фильму";
 export const INTERNAL_SERVER_MESSAGE =
   "Внутренняя ошибка сервера, попробуйте позднее";
 export const FAILED_SEARCH_MESSAGE =

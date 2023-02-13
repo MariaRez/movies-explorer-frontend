@@ -23,6 +23,7 @@ import { moviesApi } from "../../utils/MoviesApi";
 import {
   CONFLICT_ERROR,
   CONFLICT_MESSAGE,
+  CONFLICT_MESSAGE_LIKE,
   DEFAULT_MESSAGE_LOGIN,
   DEFAULT_MESSAGE_REGISTER,
   DEFAULT_MESSAGE_UPDATE,
@@ -67,8 +68,13 @@ function App() {
           history.push(path); //туда и отправляет
         })
         .catch((err) => {
-          console.log(err);
-        });
+          setIsOpenInfoTooltip(true);
+          setIsImageForInfoTooltip(wrong);
+          setIsTextForInfoTooltip(err);
+          setTimeout(() => {
+            setIsOpenInfoTooltip(false);
+          }, 2000);
+      });
     }
   }
 
@@ -171,15 +177,15 @@ function App() {
   // выход из аккаунта
   function handleExitSubmit() {
     localStorage.removeItem("token"); // удаляем токен
-     localStorage.removeItem("searchResult");
-     localStorage.removeItem("movies");
-     setBeatFilmMovies([]); // нет массива фильмов со стороннего ресурса
-     setIsFavoriteMovies([]); // нет массива любимых фильмов
-     setSearchedMovies([]); // нет найдены фильмов
-     setSearchResult(""); // нет поискового результата
-     setLoggedIn(false); // не залогинен
-     history.push("/"); // отправляем на главную страницу
-     setCurrentUser({});
+    localStorage.removeItem("searchResult");
+    localStorage.removeItem("movies");
+    setBeatFilmMovies([]); // нет массива фильмов со стороннего ресурса
+    setIsFavoriteMovies([]); // нет массива любимых фильмов
+    setSearchedMovies([]); // нет найдены фильмов
+    setSearchResult(""); // нет поискового результата
+    setLoggedIn(false); // не залогинен
+    history.push("/"); // отправляем на главную страницу
+    setCurrentUser({});
   }
   // исчезнование компонента с подсказкой
   function closeInfoTooltip() {
@@ -201,7 +207,7 @@ function App() {
         setIsTextForInfoTooltip(err);
         setTimeout(() => {
           setIsOpenInfoTooltip(false);
-        }, 1500);
+        }, 2000);
       });
   }
   // поиск на основании имени названия фильма и включает ли он переданные ключевые слова
@@ -250,13 +256,29 @@ function App() {
       mainApi
         .createMovie(movie)
         .then((res) => {
-          setIsFavoriteMovies(movies => [...movies, res.data])
+          setIsFavoriteMovies((movies) => [...movies, res.data]);
         })
         .catch((err) => {
-          setIsOpenInfoTooltip(true);
-          setIsImageForInfoTooltip(wrong);
-          setIsTextForInfoTooltip(INTERNAL_SERVER_MESSAGE);
+          if (err.includes(CONFLICT_ERROR)) {
+            handleExitSubmit();
+            setIsOpenInfoTooltip(true);
+            setIsImageForInfoTooltip(wrong);
+            setIsTextForInfoTooltip(CONFLICT_MESSAGE_LIKE);
+            setTimeout(() => {
+              setIsOpenInfoTooltip(false);
+            }, 2000);
+          } else {
+            setIsOpenInfoTooltip(true);
+            setIsImageForInfoTooltip(wrong);
+            setIsTextForInfoTooltip(INTERNAL_SERVER_MESSAGE);
+            setTimeout(() => {
+              setIsOpenInfoTooltip(false);
+            }, 2000);
+          }
         });
+    } else {
+      const dislike = favoriteMovies.find((i) => i.movieId === movie.id);
+      handleDislikeClick(dislike);
     }
   };
 
@@ -269,10 +291,13 @@ function App() {
           favoriteMovies.filter((data) => data._id !== movie._id)
         );
       })
-      .catch((err) => {
+      .catch(() => {
         setIsOpenInfoTooltip(true);
         setIsImageForInfoTooltip(wrong);
         setIsTextForInfoTooltip(INTERNAL_SERVER_MESSAGE);
+        setTimeout(() => {
+          setIsOpenInfoTooltip(false);
+        }, 2000);
       });
   }
 
@@ -289,9 +314,7 @@ function App() {
         location.pathname === "/movies" ||
         location.pathname === "/saved-movies" ||
         location.pathname === "/profile" ? (
-          <Header
-            loggedIn={loggedIn}
-          />
+          <Header loggedIn={loggedIn} />
         ) : (
           ""
         )}
@@ -324,7 +347,6 @@ function App() {
             setPreloader={setIsLoading}
             isLoading={isLoading}
             movies={favoriteMovies}
-            handleLike={handleLikeClick}
             handleDislike={handleDislikeClick}
             isLiked={isLiked}
             searchResult={searchResult}

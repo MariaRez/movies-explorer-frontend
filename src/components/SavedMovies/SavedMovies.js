@@ -18,7 +18,6 @@ function SavedMovies({
   isLoading,
   movies,
   isLiked,
-  handleLike,
   handleDislike,
   searchResult,
 }) {
@@ -64,7 +63,6 @@ function SavedMovies({
           {movies.length !== 0 && (
             <MoviesCardList
               movies={isChecked ? shortMovies : movies}
-              handleLike={handleLike}
               handleDislike={handleDislike}
               isLiked={isLiked}
             />
