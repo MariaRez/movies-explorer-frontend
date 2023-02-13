@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Route, Switch, useHistory, useLocation } from "react-router-dom";
+import {
+  Redirect,
+  Route,
+  Switch,
+  useHistory,
+  useLocation,
+} from "react-router-dom";
 import Main from "../Main/Main";
 import Footer from "../Footer/Footer";
 import "./App.css";
@@ -74,7 +80,7 @@ function App() {
           setTimeout(() => {
             setIsOpenInfoTooltip(false);
           }, 2000);
-      });
+        });
     }
   }
 
@@ -361,16 +367,24 @@ function App() {
             errorMessage={errorMessage}
           />
           <Route exact path="/signin">
-            <Login
-              handleLogin={handleLoginSubmit}
-              errorMessage={errorMessage}
-            />
+            {loggedIn ? (
+              <Redirect to="/movies" />
+            ) : (
+              <Login
+                handleLogin={handleLoginSubmit}
+                errorMessage={errorMessage}
+              />
+            )}
           </Route>
           <Route exact path="/signup">
-            <Register
-              handleRegister={handleRegisterSubmit}
-              errorMessage={errorMessage}
-            />
+            {loggedIn ? (
+              <Redirect to="/movies" />
+            ) : (
+              <Register
+                handleRegister={handleRegisterSubmit}
+                errorMessage={errorMessage}
+              />
+            )}
           </Route>
           <Route path="/*">
             <PageNotFound />
