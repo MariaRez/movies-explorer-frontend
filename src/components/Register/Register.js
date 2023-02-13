@@ -4,7 +4,7 @@ import logo from "../../images/logo.svg";
 import useFormWithValidation from "../../utils/useFormWithValidation";
 import "./Register.css";
 
-function Register({ handleRegister, errorMessage, isActive }) {
+function Register({ handleRegister, errorMessage }) {
   const { values, handleChange, errors, isValid, resetForm } = useFormWithValidation();
   const submitButtonClassName = `register__button ${!isValid && "register__button_disabled"}`;
 

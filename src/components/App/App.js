@@ -230,7 +230,6 @@ function App() {
   }
   // функция поиска
   function submitSearch(keyword) {
-    getBeatMovies();
     setTimeout(() => setIsLoading(false), 2000); // для отображения
     setSearchedMovies(search(beatFilmMovies, keyword));
     localStorage.setItem(
