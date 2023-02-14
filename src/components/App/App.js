@@ -58,6 +58,8 @@ function App() {
   const [favoriteMovies, setIsFavoriteMovies] = useState([]); // массив сохраненных фильмов пользователя
   const [searchResult, setSearchResult] = useState(""); // результат поиска
 
+  const [keyword, setKeyword] = useState((JSON.parse(localStorage.getItem("keyword")))); // ключевые слова для поиска
+
   useEffect(() => {
     checkToken();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -188,10 +190,12 @@ function App() {
     localStorage.removeItem("searchResult");
     localStorage.removeItem("movies");
     localStorage.removeItem("loggedIn");
+    localStorage.removeItem("keyword");
     setBeatFilmMovies([]); // нет массива фильмов со стороннего ресурса
     setIsFavoriteMovies([]); // нет массива любимых фильмов
     setSearchedMovies([]); // нет найдены фильмов
     setSearchResult(""); // нет поискового результата
+    setKeyword(""); // нет ключевых слов
     setErrorMessage(""); // нет ошибки при регистрации и тд
     setLoggedIn(false); // не залогинен
     history.push("/"); // отправляем на главную страницу
@@ -250,6 +254,8 @@ function App() {
       setTimeout(() => setIsLoading(false), 2000); // для отображения
       setErrorMessage("");
       setSearchedMovies(search(beatFilmMovies, keyword));
+      localStorage.setItem("keyword", JSON.stringify(keyword));
+      setKeyword(keyword);
       localStorage.setItem("searchResult", JSON.stringify(search(beatFilmMovies, keyword))
     )} else {
       // найденых фильмов не будет и указано что необходимо ввети ключевое слово
@@ -359,6 +365,8 @@ function App() {
             isLiked={isLiked}
             searchResult={searchResult}
             errorMessage={errorMessage}
+            setKeyword={setKeyword}
+            keyword={keyword}
           />
           <ProtectedRoute
             exact

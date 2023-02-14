@@ -1,11 +1,19 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import FilterCheckbox from "../FilterCheckbox/FilterCheckbox";
 import "./SearchForm.css";
 
-function SearchForm({ handleSearch, setIsChecked, setPreloader, isLoading, errorMessage }) {
+function SearchForm({
+  handleSearch,
+  setIsChecked,
+  setPreloader,
+  isLoading,
+  errorMessage,
+  setKeyword,
+  keyword
+}) {
+
   const submitButtonClassName = `search-form__button ${isLoading ? "search-form__button_disabled" : ""}`;
   const inputClassName = `search-form__input ${ isLoading ? "search-form__input_disabled" : ""}`
-  const [keyword, setKeyword] = useState(""); // ключевые слова для поиска
   const [isShortMovie, setIsShortMovie] = useState(false); // короткометражный фильм
 
   // переключаткль чек бокса
