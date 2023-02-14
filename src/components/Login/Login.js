@@ -4,9 +4,10 @@ import logo from "../../images/logo.svg";
 import useFormWithValidation from "../../utils/useFormWithValidation";
 import "./Login.css";
 
-function Login({ handleLogin, errorMessage }) {
+function Login({ handleLogin, errorMessage, isLoading }) {
   const { values, handleChange, errors, isValid, resetForm } = useFormWithValidation();
-  const submitButtonClassName = `login__button ${!isValid && "login__button_disabled"}`;
+  const submitButtonClassName = `login__button ${(!isValid || isLoading) && "login__button_disabled"}`;
+  const inputClassName = `login__input ${ isLoading ? "login__input_disabled" : ""}`
 
   useEffect(() => {
     resetForm("", "", false);
@@ -34,7 +35,7 @@ function Login({ handleLogin, errorMessage }) {
               E-mail
             </label>
             <input
-              className="login__input"
+              className={inputClassName}
               type="email"
               name="email"
               id="email"
@@ -42,6 +43,7 @@ function Login({ handleLogin, errorMessage }) {
               placeholder="Ваша почта"
               value={values.email || ""}
               onChange={handleChange}
+              disabled={isLoading ? true : false}
             />
           </fieldset>
           <span className="login__error" id="email-error">{errors.email || ""}</span>
@@ -50,7 +52,7 @@ function Login({ handleLogin, errorMessage }) {
               Пароль
             </label>
             <input
-              className="login__input"
+              className={inputClassName}
               type="password"
               name="password"
               id="password"
@@ -58,6 +60,7 @@ function Login({ handleLogin, errorMessage }) {
               placeholder="Ваш пароль"
               value={values.password || ""} 
               onChange={handleChange}
+              disabled={isLoading ? true : false}
             />
           </fieldset>
           <span className="login__error" id="password-error">{errors.password || ""}</span>
@@ -65,7 +68,7 @@ function Login({ handleLogin, errorMessage }) {
           <button 
             className={submitButtonClassName}
             type="submit"
-            disabled={!isValid}>
+            disabled={!isValid || isLoading}>
             Войти
           </button>
         </form>

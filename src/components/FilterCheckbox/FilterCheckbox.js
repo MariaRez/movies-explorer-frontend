@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./FilterCheckbox.css";
 
-function FilterCheckbox({ onCheckboxToggle }) {
+function FilterCheckbox({ onCheckboxToggle, isLoading }) {
   // состояние фильтра чекбокса
   const [isChecked, setIsChecked] = useState(false);
 
@@ -17,6 +17,7 @@ function FilterCheckbox({ onCheckboxToggle }) {
         type="checkbox"
         id="checkbox"
         name="checkbox"
+        disabled={isLoading ? true : false}
         checked={isChecked}
         onChange={(evt) => handleChange(evt)}
       />

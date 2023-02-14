@@ -21,6 +21,7 @@ function Movies({
   handleLike,
   handleDislike,
   searchResult,
+  errorMessage,
 }) {
   //состояние для хранения массива коротких фильмов
   const [shortMovies, setShortMovies] = useState([]);
@@ -41,6 +42,7 @@ function Movies({
         setIsChecked={setIsChecked}
         setPreloader={setPreloader}
         isLoading={isLoading}
+        errorMessage={errorMessage}
       />
       {isLoading ? (
         <Preloader />

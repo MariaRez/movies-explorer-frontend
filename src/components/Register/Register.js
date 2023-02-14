@@ -4,9 +4,10 @@ import logo from "../../images/logo.svg";
 import useFormWithValidation from "../../utils/useFormWithValidation";
 import "./Register.css";
 
-function Register({ handleRegister, errorMessage }) {
+function Register({ handleRegister, errorMessage, isLoading }) {
   const { values, handleChange, errors, isValid, resetForm } = useFormWithValidation();
-  const submitButtonClassName = `register__button ${!isValid && "register__button_disabled"}`;
+  const submitButtonClassName = `register__button ${(!isValid || isLoading) && "register__button_disabled"}`;
+  const inputClassName = `register__input ${ isLoading ? "register__input_disabled" : ""}`
 
   useEffect(() => {
     resetForm("", "", false);
@@ -34,7 +35,7 @@ function Register({ handleRegister, errorMessage }) {
               Имя
             </label>
             <input
-              className="register__input"
+              className={inputClassName}
               type="name"
               name="name"
               id="name"
@@ -45,6 +46,7 @@ function Register({ handleRegister, errorMessage }) {
               placeholder="Ваше имя"
               value={values.name || ""}
               onChange={handleChange}
+              disabled={isLoading ? true : false}
             />
           </fieldset>
           <span className="register__error" id="name-error">{errors.name || ""}</span>
@@ -53,7 +55,7 @@ function Register({ handleRegister, errorMessage }) {
               E-mail
             </label>
             <input
-              className="register__input"
+              className={inputClassName}
               type="email"
               name="email"
               id="email"
@@ -62,6 +64,7 @@ function Register({ handleRegister, errorMessage }) {
               placeholder="Ваша почта"
               value={values.email || ""} //значение почты или пустая строка
               onChange={handleChange}
+              disabled={isLoading ? true : false}
             />
           </fieldset>
           <span className="register__error" id="email-error">{errors.email || ""}</span>
@@ -70,7 +73,7 @@ function Register({ handleRegister, errorMessage }) {
               Пароль
             </label>
             <input
-              className="register__input"
+              className={inputClassName}
               type="password"
               name="password"
               id="password"
@@ -78,6 +81,7 @@ function Register({ handleRegister, errorMessage }) {
               placeholder="Ваш пароль"
               value={values.password || ""} //значение пароля или пустая строка
               onChange={handleChange}
+              disabled={isLoading ? true : false}
             />
           </fieldset>
           <span className="register__error" id="password-error">{errors.password || ""}</span>
@@ -85,7 +89,7 @@ function Register({ handleRegister, errorMessage }) {
           <button
             className={submitButtonClassName}
             type="submit"
-            disabled={!isValid}>
+            disabled={!isValid || isLoading}>
             Зарегистрироваться
           </button>
         </form>

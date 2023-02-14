@@ -3,11 +3,12 @@ import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import useFormWithValidation from "../../utils/useFormWithValidation";
 import "./Profile.css";
 
-function Profile({ onUpdateUser, handleExit, errorMessage }) {
+function Profile({ onUpdateUser, handleExit, errorMessage, isLoading }) {
   const currentUser = useContext(CurrentUserContext);
   const { values, handleChange, errors, isValid, resetForm } = useFormWithValidation();
   const checkValid = (!isValid || (currentUser.name === values.name && currentUser.email === values.email));
-  const submitButtonClassName = `form__button form__button_type_change ${checkValid ? "form__button_disabled": ""}`;
+  const submitButtonClassName = `form__button form__button_type_change ${checkValid || isLoading ? "form__button_disabled": ""}`;
+  const inputClassName = `form__input ${ isLoading ? "form__input_disabled" : ""}`
 
    useEffect(() => {
     resetForm(currentUser, "", false);
@@ -30,7 +31,7 @@ function Profile({ onUpdateUser, handleExit, errorMessage }) {
             Имя
           </label>
           <input
-            className="form__input"
+            className={inputClassName}
             type="text"
             name="name"
             id="name"
@@ -41,6 +42,7 @@ function Profile({ onUpdateUser, handleExit, errorMessage }) {
             placeholder="Ваше новое имя"
             value={values.name || ""}
             onChange={handleChange}
+            disabled={isLoading ? true : false}
           />
         </fieldset>
         <span className="profile__error" id="name-error">{errors.name || ""}</span>
@@ -49,7 +51,7 @@ function Profile({ onUpdateUser, handleExit, errorMessage }) {
             E-mail
           </label>
           <input
-            className="form__input"
+            className={inputClassName}
             type="email"
             name="email"
             id="email"
@@ -59,6 +61,7 @@ function Profile({ onUpdateUser, handleExit, errorMessage }) {
             placeholder="Ваша новая почта"
             value={values.email || ""}
             onChange={handleChange}
+            disabled={isLoading ? true : false}
           />
         </fieldset>
         <span className="profile__error" id="email-error">{errors.email || ""}</span>
@@ -67,7 +70,7 @@ function Profile({ onUpdateUser, handleExit, errorMessage }) {
           className={submitButtonClassName}
           type="submit"
           aria-label="Change data"
-          disabled={checkValid ? true : false}>
+          disabled={checkValid || isLoading ? true : false}>
             Редактировать
         </button>
       </form>

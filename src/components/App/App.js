@@ -69,7 +69,7 @@ function App() {
       auth
         .checkToken(token)
         .then(() => {
-          localStorage.setItem('loggedIn', JSON.stringify(loggedIn));
+          localStorage.setItem("loggedIn", JSON.stringify(loggedIn));
           setLoggedIn(true);
         })
         .catch(() => {
@@ -112,14 +112,17 @@ function App() {
 
   // регистрация нового пользователя
   function handleRegisterSubmit(name, email, password) {
+    setIsLoading(true);
     auth
       .register(name, email, password)
       .then(() => {
+        setIsLoading(false);
         handleLoginSubmit(email, password);
         setErrorMessage("");
       })
       .then(() => history.push("/movies"))
       .catch((err) => {
+        setIsLoading(false);
         if (err.includes(CONFLICT_ERROR)) {
           setErrorMessage(CONFLICT_MESSAGE);
         } else if (err.includes(INTERNAL_SERVER_ERROR)) {
@@ -131,9 +134,11 @@ function App() {
   }
   // вход в аккаунт пользователя
   function handleLoginSubmit(email, password) {
+    setIsLoading(true);
     auth
       .login(email, password)
       .then((res) => {
+        setIsLoading(false);
         localStorage.setItem("token", res.token);
         setLoggedIn(true);
         setIsOpenInfoTooltip(true);
@@ -154,6 +159,7 @@ function App() {
   }
   // редактирование профиля (имя и почта)
   function handleUpdateUser(data) {
+    setIsLoading(true);
     mainApi
       .editProfile(data)
       .then((userData) => {
@@ -164,9 +170,11 @@ function App() {
         setErrorMessage("");
         setTimeout(() => {
           setIsOpenInfoTooltip(false);
+          setIsLoading(false);
         }, 1500);
       })
       .catch((err) => {
+        setIsLoading(false);
         if (err.includes(INTERNAL_SERVER_ERROR)) {
           setErrorMessage(INTERNAL_SERVER_MESSAGE);
         } else {
@@ -184,6 +192,7 @@ function App() {
     setIsFavoriteMovies([]); // нет массива любимых фильмов
     setSearchedMovies([]); // нет найдены фильмов
     setSearchResult(""); // нет поискового результата
+    setErrorMessage(""); // нет ошибки при регистрации и тд
     setLoggedIn(false); // не залогинен
     history.push("/"); // отправляем на главную страницу
     setCurrentUser({});
@@ -237,17 +246,29 @@ function App() {
   }
   // функция поиска
   function submitSearch(keyword) {
-    setTimeout(() => setIsLoading(false), 2000); // для отображения
-    setSearchedMovies(search(beatFilmMovies, keyword));
-    localStorage.setItem(
-      "searchResult",
-      JSON.stringify(search(beatFilmMovies, keyword))
-    );
+    if (keyword !== "") {
+      setTimeout(() => setIsLoading(false), 2000); // для отображения
+      setErrorMessage("");
+      setSearchedMovies(search(beatFilmMovies, keyword));
+      localStorage.setItem("searchResult", JSON.stringify(search(beatFilmMovies, keyword))
+    )} else {
+      // найденых фильмов не будет и указано что необходимо ввети ключевое слово
+      setTimeout(() => setIsLoading(false), 500);
+      setErrorMessage("Нужно ввести ключевое слово");
+      setSearchedMovies("");
+    }
   }
   // функция поиска по сохраненным фильмам
   function submitSearchInSavedMovies(keyword) {
-    setTimeout(() => setIsLoading(false), 2000); // для отображения
-    setIsFavoriteMovies(search(favoriteMovies, keyword));
+    if (keyword !== "") {
+       setTimeout(() => setIsLoading(false), 2000); // для отображения
+       setIsFavoriteMovies(search(favoriteMovies, keyword));
+       setErrorMessage("");
+      } else {
+      // будут выведены все и указано что необходимо ввести ключевое слово
+      setTimeout(() => setIsLoading(false), 500);
+      setErrorMessage("Нужно ввести ключевое слово");
+    }
   }
 
   // функция сохранения фильма в сохраненные
@@ -337,6 +358,7 @@ function App() {
             handleDislike={handleDislikeClick}
             isLiked={isLiked}
             searchResult={searchResult}
+            errorMessage={errorMessage}
           />
           <ProtectedRoute
             exact
@@ -351,6 +373,7 @@ function App() {
             handleDislike={handleDislikeClick}
             isLiked={isLiked}
             searchResult={searchResult}
+            errorMessage={errorMessage}
           />
           <ProtectedRoute
             exact
@@ -360,6 +383,7 @@ function App() {
             loggedIn={loggedIn}
             component={Profile}
             errorMessage={errorMessage}
+            isLoading={isLoading}
           />
           <Route exact path="/signin">
             {loggedIn ? (
@@ -368,6 +392,7 @@ function App() {
               <Login
                 handleLogin={handleLoginSubmit}
                 errorMessage={errorMessage}
+                isLoading={isLoading}
               />
             )}
           </Route>
@@ -378,6 +403,7 @@ function App() {
               <Register
                 handleRegister={handleRegisterSubmit}
                 errorMessage={errorMessage}
+                isLoading={isLoading}
               />
             )}
           </Route>

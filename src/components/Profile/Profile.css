@@ -60,6 +60,11 @@
     text-align: right;
 }
 
+.form__input_disabled {
+    cursor: not-allowed;
+    color:#8B8B8B;
+}
+
 .form__input_active {
     color: #EE3465;
 }

@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import FilterCheckbox from "../FilterCheckbox/FilterCheckbox";
 import "./SearchForm.css";
 
-function SearchForm({ handleSearch, setIsChecked, setPreloader, isLoading }) {
-
+function SearchForm({ handleSearch, setIsChecked, setPreloader, isLoading, errorMessage }) {
+  const submitButtonClassName = `search-form__button ${isLoading ? "search-form__button_disabled" : ""}`;
+  const inputClassName = `search-form__input ${ isLoading ? "search-form__input_disabled" : ""}`
   const [keyword, setKeyword] = useState(""); // ключевые слова для поиска
   const [isShortMovie, setIsShortMovie] = useState(false); // короткометражный фильм
 
@@ -31,27 +32,27 @@ function SearchForm({ handleSearch, setIsChecked, setPreloader, isLoading }) {
         onSubmit={handleSubmit}
       >
         <input
-          className="search-form__input"
+          className={inputClassName}
           type="text"
           name="keyword"
           id="keyword"
-          // required
           placeholder="Введите ключевое слово для поиска"
           value={keyword}
           onChange={handleKeyword}
-          disabled={isLoading}
+          disabled={isLoading ? true : false}
         />
         <button
-          className="search-form__button"
+          className={submitButtonClassName}
           type="submit"
+          disabled={isLoading ? true : false}
         >
           Поиск
         </button>
       </form>
       <span className="search-form__error" id="keywords-error">
-        {/* {errors} */}
+        {errorMessage}
       </span>
-      <FilterCheckbox onCheckboxToggle={onCheckboxToggle} />
+      <FilterCheckbox onCheckboxToggle={onCheckboxToggle} isLoading={isLoading} />
     </div>
   );
 }
