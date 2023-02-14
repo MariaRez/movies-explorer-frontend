@@ -1,16 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import "./FilterCheckbox.css";
 
-function FilterCheckbox({ onCheckboxToggle, isLoading }) {
-  // состояние фильтра чекбокса
-  const [isChecked, setIsChecked] = useState(false);
-
+function FilterCheckbox({ onCheckboxToggle, isLoading, isChecked, setIsChecked }) {
   function handleChange(evt) {
     //изменение на противоположное состояние при переключении флажка
     onCheckboxToggle(!isChecked);
     setIsChecked(evt.target.checked);
   }
-
   return (
     <div className="filter-checkbox">
       <input

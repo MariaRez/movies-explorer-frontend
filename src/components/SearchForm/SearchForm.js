@@ -10,6 +10,7 @@ function SearchForm({
   errorMessage,
   setKeyword,
   keyword,
+  isChecked
 }) {
   const submitButtonClassName = `search-form__button ${
     isLoading ? "search-form__button_disabled" : ""
@@ -66,6 +67,8 @@ function SearchForm({
       <FilterCheckbox
         onCheckboxToggle={onCheckboxToggle}
         isLoading={isLoading}
+        isChecked={isChecked}
+        setIsChecked={setIsChecked}
       />
     </div>
   );
