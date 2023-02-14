@@ -58,7 +58,7 @@ function App() {
   const [favoriteMovies, setIsFavoriteMovies] = useState([]); // массив сохраненных фильмов пользователя
   const [searchResult, setSearchResult] = useState(""); // результат поиска
 
-  const [keyword, setKeyword] = useState((JSON.parse(localStorage.getItem("keyword")))); // ключевые слова для поиска
+  const [keyword, setKeyword] = useState((JSON.parse(localStorage.getItem("keyword"))) ? (JSON.parse(localStorage.getItem("keyword"))) : ""); // ключевые слова для поиска
 
   useEffect(() => {
     checkToken();
@@ -104,6 +104,7 @@ function App() {
     if (movies) {
       setBeatFilmMovies(movies);
       const searchResult = JSON.parse(localStorage.getItem("searchResult"));
+      // const keyword = JSON.parse(localStorage.getItem("keyword"));
       if (searchResult) {
         setSearchedMovies(searchResult);
       }
@@ -261,6 +262,9 @@ function App() {
       // найденых фильмов не будет и указано что необходимо ввети ключевое слово
       setTimeout(() => setIsLoading(false), 500);
       setErrorMessage("Нужно ввести ключевое слово");
+      localStorage.removeItem("keyword");
+      localStorage.removeItem("searchResult");
+      setKeyword("");
       setSearchedMovies("");
     }
   }
