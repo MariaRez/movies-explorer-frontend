@@ -71,16 +71,6 @@
     opacity: 0.6;
 }
 
-.search-form__button_disabled {
-    background: #424242;  
-    color:#8B8B8B;
-    cursor: not-allowed;
-}
-
-.search-form__button_disabled:hover {
-    opacity: 1;
-}
-
 
 @media (max-width: 767px) {
     .search-form {
