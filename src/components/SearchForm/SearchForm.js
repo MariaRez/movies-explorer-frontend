@@ -9,11 +9,14 @@ function SearchForm({
   isLoading,
   errorMessage,
   setKeyword,
-  keyword
+  keyword,
 }) {
-
-  const submitButtonClassName = `search-form__button ${isLoading ? "search-form__button_disabled" : ""}`;
-  const inputClassName = `search-form__input ${ isLoading ? "search-form__input_disabled" : ""}`
+  const submitButtonClassName = `search-form__button ${
+    isLoading ? "search-form__button_disabled" : ""
+  }`;
+  const inputClassName = `search-form__input ${
+    isLoading ? "search-form__input_disabled" : ""
+  }`;
   const [isShortMovie, setIsShortMovie] = useState(false); // короткометражный фильм
 
   // переключаткль чек бокса
@@ -60,7 +63,10 @@ function SearchForm({
       <span className="search-form__error" id="keywords-error">
         {errorMessage}
       </span>
-      <FilterCheckbox onCheckboxToggle={onCheckboxToggle} isLoading={isLoading} />
+      <FilterCheckbox
+        onCheckboxToggle={onCheckboxToggle}
+        isLoading={isLoading}
+      />
     </div>
   );
 }

@@ -23,6 +23,7 @@ export const NOT_FOUND_SHORT_SEARCH_MESSAGE =
 export const WELCOME_MESSAGE = "Добро пожаловать!";
 export const SUCCESSFUL_UPDATE_MESSAGE = "Данные профиля успешно обновлены!";
 export const START_SEARCH = "Введите поисковый запрос";
+export const NEED_SEARCH_MESSAGE = "Нужно ввести ключевое слово";
 
 //числовые константы
 export const SHORT_MOVIES_DURATION = 40;

@@ -36,6 +36,7 @@ import {
   FAILED_SEARCH_MESSAGE,
   INTERNAL_SERVER_ERROR,
   INTERNAL_SERVER_MESSAGE,
+  NEED_SEARCH_MESSAGE,
   NOT_FOUND_SEARCH_MESSAGE,
   SHORT_MOVIES_DURATION,
   SUCCESSFUL_UPDATE_MESSAGE,
@@ -45,7 +46,9 @@ import {
 function App() {
   const location = useLocation(); // подвал приложения должен быть на странице о проекте, фильмы и сохраненные фильмы
   const history = useHistory(); // для перенаправления (при проверке токена)
-  const [loggedIn, setLoggedIn] = useState((JSON.parse(localStorage.getItem("loggedIn"))) ? true : false);
+  const [loggedIn, setLoggedIn] = useState(
+    JSON.parse(localStorage.getItem("loggedIn")) ? true : false
+  );
   const [currentUser, setCurrentUser] = useState({}); // текущий пользователь
   const [isOpenInfoTooltip, setIsOpenInfoTooltip] = useState(false); // появление компонента с подсказкой
   const [isImageForInfoTooltip, setIsImageForInfoTooltip] = useState(""); // изображение для попапа
@@ -57,8 +60,11 @@ function App() {
   const [searchedMovies, setSearchedMovies] = useState([]); // массив искомых фильмов в результате поиска
   const [favoriteMovies, setIsFavoriteMovies] = useState([]); // массив сохраненных фильмов пользователя
   const [searchResult, setSearchResult] = useState(""); // результат поиска
-
-  const [keyword, setKeyword] = useState((JSON.parse(localStorage.getItem("keyword"))) ? (JSON.parse(localStorage.getItem("keyword"))) : ""); // ключевые слова для поиска
+  const [keyword, setKeyword] = useState(
+    JSON.parse(localStorage.getItem("keyword"))
+      ? JSON.parse(localStorage.getItem("keyword"))
+      : ""
+  ); // ключевые слова для поиска
 
   useEffect(() => {
     checkToken();
@@ -104,7 +110,6 @@ function App() {
     if (movies) {
       setBeatFilmMovies(movies);
       const searchResult = JSON.parse(localStorage.getItem("searchResult"));
-      // const keyword = JSON.parse(localStorage.getItem("keyword"));
       if (searchResult) {
         setSearchedMovies(searchResult);
       }
@@ -199,8 +204,8 @@ function App() {
     setKeyword(""); // нет ключевых слов
     setErrorMessage(""); // нет ошибки при регистрации и тд
     setLoggedIn(false); // не залогинен
-    history.push("/"); // отправляем на главную страницу
     setCurrentUser({});
+    history.push("/"); // отправляем на главную страницу
   }
   // исчезнование компонента с подсказкой
   function closeInfoTooltip() {
@@ -257,11 +262,14 @@ function App() {
       setSearchedMovies(search(beatFilmMovies, keyword));
       localStorage.setItem("keyword", JSON.stringify(keyword));
       setKeyword(keyword);
-      localStorage.setItem("searchResult", JSON.stringify(search(beatFilmMovies, keyword))
-    )} else {
+      localStorage.setItem(
+        "searchResult",
+        JSON.stringify(search(beatFilmMovies, keyword))
+      );
+    } else {
       // найденых фильмов не будет и указано что необходимо ввети ключевое слово
       setTimeout(() => setIsLoading(false), 500);
-      setErrorMessage("Нужно ввести ключевое слово");
+      setErrorMessage(NEED_SEARCH_MESSAGE);
       localStorage.removeItem("keyword");
       localStorage.removeItem("searchResult");
       setKeyword("");
@@ -271,13 +279,13 @@ function App() {
   // функция поиска по сохраненным фильмам
   function submitSearchInSavedMovies(keyword) {
     if (keyword !== "") {
-       setTimeout(() => setIsLoading(false), 2000); // для отображения
-       setIsFavoriteMovies(search(favoriteMovies, keyword));
-       setErrorMessage("");
-      } else {
+      setTimeout(() => setIsLoading(false), 2000); // для отображения
+      setIsFavoriteMovies(search(favoriteMovies, keyword));
+      setErrorMessage("");
+    } else {
       // будут выведены все и указано что необходимо ввести ключевое слово
       setTimeout(() => setIsLoading(false), 500);
-      setErrorMessage("Нужно ввести ключевое слово");
+      setErrorMessage(NEED_SEARCH_MESSAGE);
     }
   }
 
