@@ -45,7 +45,7 @@ import {
 function App() {
   const location = useLocation(); // подвал приложения должен быть на странице о проекте, фильмы и сохраненные фильмы
   const history = useHistory(); // для перенаправления (при проверке токена)
-  const [loggedIn, setLoggedIn] = useState(false); // залогинен ли пользователь
+  const [loggedIn, setLoggedIn] = useState((JSON.parse(localStorage.getItem("loggedIn"))) ? true : false);
   const [currentUser, setCurrentUser] = useState({}); // текущий пользователь
   const [isOpenInfoTooltip, setIsOpenInfoTooltip] = useState(false); // появление компонента с подсказкой
   const [isImageForInfoTooltip, setIsImageForInfoTooltip] = useState(""); // изображение для попапа
@@ -61,25 +61,19 @@ function App() {
   useEffect(() => {
     checkToken();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [loggedIn]);
 
   function checkToken() {
     const token = localStorage.getItem("token");
-    const path = location.pathname; // в какой локации мы находились
     if (token) {
       auth
         .checkToken(token)
         .then(() => {
+          localStorage.setItem('loggedIn', JSON.stringify(loggedIn));
           setLoggedIn(true);
-          history.push(path); //туда и отправляет
         })
-        .catch((err) => {
-          setIsOpenInfoTooltip(true);
-          setIsImageForInfoTooltip(wrong);
-          setIsTextForInfoTooltip(err);
-          setTimeout(() => {
-            setIsOpenInfoTooltip(false);
-          }, 2000);
+        .catch(() => {
+          handleExitSubmit();
         });
     }
   }
@@ -185,6 +179,7 @@ function App() {
     localStorage.removeItem("token"); // удаляем токен
     localStorage.removeItem("searchResult");
     localStorage.removeItem("movies");
+    localStorage.removeItem("loggedIn");
     setBeatFilmMovies([]); // нет массива фильмов со стороннего ресурса
     setIsFavoriteMovies([]); // нет массива любимых фильмов
     setSearchedMovies([]); // нет найдены фильмов
