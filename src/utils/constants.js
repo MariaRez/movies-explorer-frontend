@@ -17,14 +17,10 @@ export const DEFAULT_MESSAGE_LOGIN =
 export const DEFAULT_MESSAGE_UPDATE =
   "Очень жаль, произошла ошибка при изменении данных пользователя";
 
-export const NOT_FOUND_SHORT_SEARCH_MESSAGE =
-  "Короткометражные фильмы не найдены";
-
 export const WELCOME_MESSAGE = "Добро пожаловать!";
 export const SUCCESSFUL_UPDATE_MESSAGE = "Данные профиля успешно обновлены!";
 export const START_SEARCH = "Введите поисковый запрос";
-export const NEED_SEARCH_MESSAGE = "Нужно ввести ключевое слово";
-
+export const NEED_SEARCH_MESSAGE = "Для осуществления поиска нужно ввести ключевое слово";
 //числовые константы
 export const SHORT_MOVIES_DURATION = 40;
 

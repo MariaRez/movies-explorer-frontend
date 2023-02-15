@@ -1,29 +1,43 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import FilterCheckbox from "../FilterCheckbox/FilterCheckbox";
 import "./SearchForm.css";
 
-function SearchForm({
-  handleSearch,
-  setIsChecked,
-  setPreloader,
-  isLoading,
-  errorMessage,
-  setKeyword,
-  keyword,
-  isChecked
-}) {
+function SearchForm({ handleSearch, setPreloader, isLoading, errorMessage }) {
   const submitButtonClassName = `search-form__button ${
     isLoading ? "search-form__button_disabled" : ""
   }`;
   const inputClassName = `search-form__input ${
     isLoading ? "search-form__input_disabled" : ""
   }`;
-  const [isShortMovie, setIsShortMovie] = useState(false); // короткометражный фильм
 
+  const location = useLocation();
+
+  const [keyword, setKeyword] = useState(""); // ключевые слова для поиска
+  const [isChecked, setIsChecked] = useState(false); // состояние чекбокса
+
+  useEffect(() => {
+    if (location.pathname === "/movies") {
+      const keyword = localStorage.getItem("keyword");
+      const checked = localStorage.getItem("isChecked");
+      if (keyword) {
+        setKeyword(keyword);
+      }
+      if (JSON.parse(checked) === true) {
+        setIsChecked(true);
+      } else {
+        setIsChecked(false);
+      }
+    }
+  }, [location.pathname]);
+
+  function toggleCheckbox(isChecked) {
+    setIsChecked(isChecked);
+    handleSearch(keyword, isChecked);
+  }
   // переключаткль чек бокса
-  function onCheckboxToggle(checked) {
-    setIsShortMovie(checked);
-    setIsChecked(!isShortMovie);
+  function handleCheckbox(evt) {
+    toggleCheckbox(evt.target.checked);
   }
   // переключатель для ключевых слов поиска
   function handleKeyword(evt) {
@@ -32,10 +46,9 @@ function SearchForm({
   // функция отправки - передвем слова для поиска и прелоудер на отображение
   function handleSubmit(evt) {
     evt.preventDefault();
-    handleSearch(keyword);
+    handleSearch(keyword, isChecked);
     setPreloader(true); // запуск прелоудера загрузки
   }
-
   return (
     <div className="search-form">
       <form
@@ -65,10 +78,9 @@ function SearchForm({
         {errorMessage}
       </span>
       <FilterCheckbox
-        onCheckboxToggle={onCheckboxToggle}
+        onCheckboxToggle={handleCheckbox}
         isLoading={isLoading}
         isChecked={isChecked}
-        setIsChecked={setIsChecked}
       />
     </div>
   );

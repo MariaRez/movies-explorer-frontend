@@ -1,12 +1,7 @@
 import React from "react";
 import "./FilterCheckbox.css";
 
-function FilterCheckbox({ onCheckboxToggle, isLoading, isChecked, setIsChecked }) {
-  function handleChange(evt) {
-    //изменение на противоположное состояние при переключении флажка
-    onCheckboxToggle(!isChecked);
-    setIsChecked(evt.target.checked);
-  }
+function FilterCheckbox({ onCheckboxToggle, isLoading, isChecked }) {
   return (
     <div className="filter-checkbox">
       <input
@@ -15,7 +10,7 @@ function FilterCheckbox({ onCheckboxToggle, isLoading, isChecked, setIsChecked }
         name="checkbox"
         disabled={isLoading ? true : false}
         checked={isChecked}
-        onChange={(evt) => handleChange(evt)}
+        onChange={onCheckboxToggle}
       />
       <label htmlFor="checkbox" className="filter-checkbox__label"></label>
       <p className="filter-checkbox__text">Короткометражки</p>

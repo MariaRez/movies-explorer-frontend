@@ -33,11 +33,8 @@ import {
   DEFAULT_MESSAGE_LOGIN,
   DEFAULT_MESSAGE_REGISTER,
   DEFAULT_MESSAGE_UPDATE,
-  FAILED_SEARCH_MESSAGE,
   INTERNAL_SERVER_ERROR,
   INTERNAL_SERVER_MESSAGE,
-  NEED_SEARCH_MESSAGE,
-  NOT_FOUND_SEARCH_MESSAGE,
   SHORT_MOVIES_DURATION,
   SUCCESSFUL_UPDATE_MESSAGE,
   WELCOME_MESSAGE,
@@ -59,12 +56,8 @@ function App() {
   const [beatFilmMovies, setBeatFilmMovies] = useState([]); // массив фильмов, полученных со стороннего ресурса
   const [searchedMovies, setSearchedMovies] = useState([]); // массив искомых фильмов в результате поиска
   const [favoriteMovies, setIsFavoriteMovies] = useState([]); // массив сохраненных фильмов пользователя
-  const [searchResult, setSearchResult] = useState(""); // результат поиска
-  const [keyword, setKeyword] = useState(
-    JSON.parse(localStorage.getItem("keyword"))
-      ? JSON.parse(localStorage.getItem("keyword"))
-      : ""
-  ); // ключевые слова для поиска
+  const [keyword, setKeyword] = useState(""); // ключевые слова для поиска
+  const [isChecked, setIsChecked] = useState(false); // состояние чекбокса
 
   useEffect(() => {
     checkToken();
@@ -94,7 +87,6 @@ function App() {
           setIsFavoriteMovies(favoriteMovies.data);
         })
         .catch((err) => {
-          setSearchResult(FAILED_SEARCH_MESSAGE);
           setIsOpenInfoTooltip(true);
           setIsImageForInfoTooltip(wrong);
           setIsTextForInfoTooltip(err);
@@ -102,19 +94,6 @@ function App() {
             setIsOpenInfoTooltip(false);
           }, 2000);
         });
-    }
-  }, [loggedIn]);
-
-  useEffect(() => {
-    const movies = JSON.parse(localStorage.getItem("movies"));
-    if (movies) {
-      setBeatFilmMovies(movies);
-      const searchResult = JSON.parse(localStorage.getItem("searchResult"));
-      if (searchResult) {
-        setSearchedMovies(searchResult);
-      }
-    } else {
-      getBeatMovies();
     }
   }, [loggedIn]);
 
@@ -190,6 +169,10 @@ function App() {
         }
       });
   }
+  // исчезнование компонента с подсказкой
+  function closeInfoTooltip() {
+    setIsOpenInfoTooltip(false);
+  }
   // выход из аккаунта
   function handleExitSubmit() {
     localStorage.removeItem("token"); // удаляем токен
@@ -197,19 +180,38 @@ function App() {
     localStorage.removeItem("movies");
     localStorage.removeItem("loggedIn");
     localStorage.removeItem("keyword");
+    localStorage.removeItem("isChecked");
     setBeatFilmMovies([]); // нет массива фильмов со стороннего ресурса
     setIsFavoriteMovies([]); // нет массива любимых фильмов
     setSearchedMovies([]); // нет найдены фильмов
-    setSearchResult(""); // нет поискового результата
     setKeyword(""); // нет ключевых слов
     setErrorMessage(""); // нет ошибки при регистрации и тд
     setLoggedIn(false); // не залогинен
     setCurrentUser({});
     history.push("/"); // отправляем на главную страницу
   }
-  // исчезнование компонента с подсказкой
-  function closeInfoTooltip() {
-    setIsOpenInfoTooltip(false);
+
+  useEffect(() => {
+    if (localStorage.getItem("searchResult")) {
+      const movies = JSON.parse(localStorage.getItem("searchResult"));
+      const searchResult = search(movies, keyword, isChecked);
+      setSearchedMovies(searchResult);
+    }
+  }, [keyword, isChecked]);
+
+  //функция поиска по фильмам
+  function submitSearch(keyword, isChecked) {
+    setTimeout(() => setIsLoading(false), 2000); // для отображения
+    setErrorMessage("");
+    setKeyword(keyword);
+    setIsChecked(isChecked);
+    const movies = JSON.parse(localStorage.getItem("movies"));
+    if (!movies) {
+      setIsLoading(true);
+      getBeatMovies();
+    } else {
+      setBeatFilmMovies(movies);
+    }
   }
   // получение фильмов со стороннего ресурса
   function getBeatMovies() {
@@ -221,7 +223,6 @@ function App() {
         setIsLoading(false);
       })
       .catch((err) => {
-        setSearchResult(FAILED_SEARCH_MESSAGE);
         setIsOpenInfoTooltip(true);
         setIsImageForInfoTooltip(wrong);
         setIsTextForInfoTooltip(err);
@@ -230,63 +231,35 @@ function App() {
         }, 2000);
       });
   }
-  // поиск на основании имени названия фильма и включает ли он переданные ключевые слова
-  function search(data, keyword) {
-    let result = data;
-    if (keyword) {
-      keyword = keyword.toLowerCase();
-      result = data.filter((data) => {
-        return (
-          data.nameRU.toLowerCase().includes(keyword) ||
-          data.nameEN.toLowerCase().includes(keyword)
-        );
-      });
-      if (result.length === 0) {
-        setSearchResult(NOT_FOUND_SEARCH_MESSAGE);
-      }
+
+  useEffect(() => {
+    if (beatFilmMovies.length > 0) {
+      const movies = search(beatFilmMovies, keyword, isChecked);
+      localStorage.setItem("searchedMovies", JSON.stringify(movies));
+      localStorage.setItem("keyword", keyword);
+      localStorage.setItem("isChecked", isChecked);
+      setSearchedMovies(movies);
     }
-    return result;
-  }
-  // функция фортировки фильмов на короткометражные - собираем массив в передаем его дальше (если продолжительность меньше или равна 40)
-  function sortingMovies(movies) {
-    const shortMoviesArray = movies.filter(
-      (movie) => movie.duration <= SHORT_MOVIES_DURATION
-    );
-    return shortMoviesArray;
-  }
-  // функция поиска
-  function submitSearch(keyword) {
-    if (keyword !== "") {
-      setTimeout(() => setIsLoading(false), 2000); // для отображения
-      setErrorMessage("");
-      setSearchedMovies(search(beatFilmMovies, keyword));
-      localStorage.setItem("keyword", JSON.stringify(keyword));
-      setKeyword(keyword);
-      localStorage.setItem(
-        "searchResult",
-        JSON.stringify(search(beatFilmMovies, keyword))
+  }, [beatFilmMovies, keyword, isChecked]);
+
+  // Функция поиска фильмов
+  function search(movies, keyword, isChecked) {
+    let result;
+    let shortMoviesArray = movies;
+    if (isChecked) {
+      // функция cортировки фильмов на короткометражные - собираем массив в передаем его дальше (если продолжительность меньше или равна 40)
+      shortMoviesArray = shortMoviesArray.filter(
+        (movie) => movie.duration <= SHORT_MOVIES_DURATION
       );
-    } else {
-      // найденых фильмов не будет и указано что необходимо ввети ключевое слово
-      setTimeout(() => setIsLoading(false), 500);
-      setErrorMessage(NEED_SEARCH_MESSAGE);
-      localStorage.removeItem("keyword");
-      localStorage.removeItem("searchResult");
-      setKeyword("");
-      setSearchedMovies("");
     }
-  }
-  // функция поиска по сохраненным фильмам
-  function submitSearchInSavedMovies(keyword) {
-    if (keyword !== "") {
-      setTimeout(() => setIsLoading(false), 2000); // для отображения
-      setIsFavoriteMovies(search(favoriteMovies, keyword));
-      setErrorMessage("");
-    } else {
-      // будут выведены все и указано что необходимо ввести ключевое слово
-      setTimeout(() => setIsLoading(false), 500);
-      setErrorMessage(NEED_SEARCH_MESSAGE);
-    }
+    result = shortMoviesArray.filter((movie) => {
+      return (
+        // на основании названия на английском и русском
+        movie.nameRU.toLowerCase().includes(keyword.toLowerCase()) ||
+        movie.nameEN.toLowerCase().includes(keyword.toLowerCase())
+      );
+    });
+    return result;
   }
 
   // функция сохранения фильма в сохраненные
@@ -367,33 +340,24 @@ function App() {
             path="/movies"
             loggedIn={loggedIn}
             component={Movies}
-            sortingMovies={sortingMovies}
-            onSubmitSearch={submitSearch}
-            setPreloader={setIsLoading}
+            handleSearch={submitSearch}
             isLoading={isLoading}
             movies={searchedMovies}
             handleLike={handleLikeClick}
             handleDislike={handleDislikeClick}
             isLiked={isLiked}
-            searchResult={searchResult}
             errorMessage={errorMessage}
-            setKeyword={setKeyword}
-            keyword={keyword}
+            setPreloader={setIsLoading}
+            onSubmitSearch={submitSearch}
           />
           <ProtectedRoute
             exact
             path="/saved-movies"
             loggedIn={loggedIn}
             component={SavedMovies}
-            sortingMovies={sortingMovies}
-            onSubmitSearch={submitSearchInSavedMovies}
-            setPreloader={setIsLoading}
-            isLoading={isLoading}
             movies={favoriteMovies}
-            handleDislike={handleDislikeClick}
             isLiked={isLiked}
-            searchResult={searchResult}
-            errorMessage={errorMessage}
+            handleDislike={handleDislikeClick}
           />
           <ProtectedRoute
             exact
