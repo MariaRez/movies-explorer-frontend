@@ -35,6 +35,7 @@ import {
   DEFAULT_MESSAGE_UPDATE,
   INTERNAL_SERVER_ERROR,
   INTERNAL_SERVER_MESSAGE,
+  NEED_SEARCH_MESSAGE,
   NOT_FOUND_SEARCH_MESSAGE,
   SHORT_MOVIES_DURATION,
   SUCCESSFUL_UPDATE_MESSAGE,
@@ -51,7 +52,10 @@ function App() {
   const [isOpenInfoTooltip, setIsOpenInfoTooltip] = useState(false); // появление компонента с подсказкой
   const [isImageForInfoTooltip, setIsImageForInfoTooltip] = useState(""); // изображение для попапа
   const [isTextForInfoTooltip, setIsTextForInfoTooltip] = useState(""); // текст для попапа
-  const [errorMessage, setErrorMessage] = useState(""); // ошибка над кнопками зарегистрироваться, войти и редактирование профиля
+  const [errorMessage, setErrorMessage] = useState(""); // ошибка над кнопкой в логине
+  const [errorMessageInRegister, setErrorMessageInRegister] = useState(""); //ошибка над кнопкой в регистрации
+  const [errorMessageInSearch, setErrorMessageInSearch] = useState(""); // ошибка под кнопкой в поиске
+  const [errorMessageInProfile, setErrorMessageInProfile] = useState(""); // ошибка над кнопкой в изменении профиля
   const [isLoading, setIsLoading] = useState(false); // загрузка
   //блок с фильмами
   const [beatFilmMovies, setBeatFilmMovies] = useState([]); // массив фильмов, полученных со стороннего ресурса
@@ -103,19 +107,28 @@ function App() {
       .then(() => {
         setIsLoading(false);
         handleLoginSubmit(email, password);
-        setErrorMessage("");
+        setErrorMessageInRegister("");
       })
       .then(() => history.push("/movies"))
       .catch((err) => {
         if (err.includes(CONFLICT_ERROR)) {
+          setErrorMessageInRegister(CONFLICT_MESSAGE);
           setIsLoading(false);
-          setErrorMessage(CONFLICT_MESSAGE);
+          setTimeout(() => {
+            setErrorMessageInRegister("");
+          }, 1500);
         } else if (err.includes(INTERNAL_SERVER_ERROR)) {
-          setErrorMessage(INTERNAL_SERVER_MESSAGE);
+          setErrorMessageInRegister(INTERNAL_SERVER_MESSAGE);
           setIsLoading(false);
+          setTimeout(() => {
+            setErrorMessageInRegister("");
+          }, 1500);
         } else {
-          setErrorMessage(DEFAULT_MESSAGE_REGISTER);
+          setErrorMessageInRegister(DEFAULT_MESSAGE_REGISTER);
           setIsLoading(false);
+          setTimeout(() => {
+            setErrorMessageInRegister("");
+          }, 1500);
         }
       });
   }
@@ -129,6 +142,7 @@ function App() {
         localStorage.setItem("token", res.token);
         setLoggedIn(true);
         setIsOpenInfoTooltip(true);
+        setErrorMessage("");
         setIsImageForInfoTooltip(success);
         setIsTextForInfoTooltip(WELCOME_MESSAGE);
         setTimeout(() => {
@@ -140,9 +154,15 @@ function App() {
         if (err.includes(INTERNAL_SERVER_ERROR)) {
           setErrorMessage(INTERNAL_SERVER_MESSAGE);
           setIsLoading(false);
+          setTimeout(() => {
+            setErrorMessage("");
+          }, 1500);
         } else {
           setErrorMessage(DEFAULT_MESSAGE_LOGIN);
           setIsLoading(false);
+          setTimeout(() => {
+            setErrorMessage("");
+          }, 1500);
         }
       });
   }
@@ -156,7 +176,7 @@ function App() {
         setIsOpenInfoTooltip(true);
         setIsImageForInfoTooltip(success);
         setIsTextForInfoTooltip(SUCCESSFUL_UPDATE_MESSAGE);
-        setErrorMessage("");
+        setErrorMessageInProfile("");
         setTimeout(() => {
           setIsOpenInfoTooltip(false);
           setIsLoading(false);
@@ -164,11 +184,17 @@ function App() {
       })
       .catch((err) => {
         if (err.includes(INTERNAL_SERVER_ERROR)) {
-          setErrorMessage(INTERNAL_SERVER_MESSAGE);
+          setErrorMessageInProfile(INTERNAL_SERVER_MESSAGE);
           setIsLoading(false);
+          setTimeout(() => {
+            setErrorMessageInProfile("");
+          }, 1500);
         } else {
-          setErrorMessage(DEFAULT_MESSAGE_UPDATE);
+          setErrorMessageInProfile(DEFAULT_MESSAGE_UPDATE);
           setIsLoading(false);
+          setTimeout(() => {
+            setErrorMessageInProfile("");
+          }, 1500);
         }
       });
   }
@@ -221,18 +247,24 @@ function App() {
 
   //функция поиска по фильмам
   function submitSearch(keyword, isChecked) {
-    setTimeout(() => setIsLoading(false), 2000); // для отображения
-    setErrorMessage("");
-    setKeyword(keyword);
-    setIsChecked(isChecked);
-    const movies = JSON.parse(localStorage.getItem("movies"));
-    if (!movies) {
-      setIsLoading(true);
-      getBeatMovies();
+    if (keyword !== "") {
+      setTimeout(() => setIsLoading(false), 2000); // для отображения
+      setErrorMessage("");
+      setKeyword(keyword);
+      setIsChecked(isChecked);
+      const movies = JSON.parse(localStorage.getItem("movies"));
+      if (!movies) {
+        setIsLoading(true);
+        getBeatMovies();
+      } else {
+        setBeatFilmMovies(movies);
+      }
     } else {
-      setBeatFilmMovies(movies);
-    }
+      setTimeout(() => setIsLoading(false), 1000);
+      setErrorMessageInSearch(NEED_SEARCH_MESSAGE);
+      setSearchedMovies([]);
   }
+}
   // получение фильмов со стороннего ресурса
   function getBeatMovies() {
     setIsLoading(true); // загрузка
@@ -356,7 +388,7 @@ function App() {
             handleLike={handleLikeClick}
             handleDislike={handleDislikeClick}
             isLiked={isLiked}
-            errorMessage={errorMessage}
+            errorMessage={errorMessageInSearch}
             setPreloader={setIsLoading}
             searchResult={searchResult}
           />
@@ -396,7 +428,7 @@ function App() {
             ) : (
               <Register
                 handleRegister={handleRegisterSubmit}
-                errorMessage={errorMessage}
+                errorMessage={errorMessageInRegister}
                 isLoading={isLoading}
               />
             )}
