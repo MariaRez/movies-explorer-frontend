@@ -35,6 +35,7 @@ import {
   DEFAULT_MESSAGE_UPDATE,
   INTERNAL_SERVER_ERROR,
   INTERNAL_SERVER_MESSAGE,
+  NOT_FOUND_SEARCH_MESSAGE,
   SHORT_MOVIES_DURATION,
   SUCCESSFUL_UPDATE_MESSAGE,
   WELCOME_MESSAGE,
@@ -58,12 +59,11 @@ function App() {
   const [favoriteMovies, setIsFavoriteMovies] = useState([]); // массив сохраненных фильмов пользователя
   const [keyword, setKeyword] = useState(""); // ключевые слова для поиска
   const [isChecked, setIsChecked] = useState(false); // состояние чекбокса
-
+  const [searchResult, setSearchResult] = useState(""); // результат поиска
   useEffect(() => {
     checkToken();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loggedIn]);
-
   function checkToken() {
     const token = localStorage.getItem("token");
     if (token) {
@@ -78,7 +78,6 @@ function App() {
         });
     }
   }
-
   useEffect(() => {
     if (loggedIn) {
       Promise.all([mainApi.getUserInfo(), mainApi.getUserMovies()])
@@ -96,7 +95,6 @@ function App() {
         });
     }
   }, [loggedIn]);
-
   // регистрация нового пользователя
   function handleRegisterSubmit(name, email, password) {
     setIsLoading(true);
@@ -109,13 +107,15 @@ function App() {
       })
       .then(() => history.push("/movies"))
       .catch((err) => {
-        setIsLoading(false);
         if (err.includes(CONFLICT_ERROR)) {
+          setIsLoading(false);
           setErrorMessage(CONFLICT_MESSAGE);
         } else if (err.includes(INTERNAL_SERVER_ERROR)) {
           setErrorMessage(INTERNAL_SERVER_MESSAGE);
+          setIsLoading(false);
         } else {
           setErrorMessage(DEFAULT_MESSAGE_REGISTER);
+          setIsLoading(false);
         }
       });
   }
@@ -139,8 +139,10 @@ function App() {
       .catch((err) => {
         if (err.includes(INTERNAL_SERVER_ERROR)) {
           setErrorMessage(INTERNAL_SERVER_MESSAGE);
+          setIsLoading(false);
         } else {
           setErrorMessage(DEFAULT_MESSAGE_LOGIN);
+          setIsLoading(false);
         }
       });
   }
@@ -161,11 +163,12 @@ function App() {
         }, 1500);
       })
       .catch((err) => {
-        setIsLoading(false);
         if (err.includes(INTERNAL_SERVER_ERROR)) {
           setErrorMessage(INTERNAL_SERVER_MESSAGE);
+          setIsLoading(false);
         } else {
           setErrorMessage(DEFAULT_MESSAGE_UPDATE);
+          setIsLoading(false);
         }
       });
   }
@@ -176,7 +179,7 @@ function App() {
   // выход из аккаунта
   function handleExitSubmit() {
     localStorage.removeItem("token"); // удаляем токен
-    localStorage.removeItem("searchResult");
+    localStorage.removeItem("searchedMovies");
     localStorage.removeItem("movies");
     localStorage.removeItem("loggedIn");
     localStorage.removeItem("keyword");
@@ -187,17 +190,34 @@ function App() {
     setKeyword(""); // нет ключевых слов
     setErrorMessage(""); // нет ошибки при регистрации и тд
     setLoggedIn(false); // не залогинен
+    setSearchResult(""); // не результатов поиска
     setCurrentUser({});
     history.push("/"); // отправляем на главную страницу
   }
-
   useEffect(() => {
-    if (localStorage.getItem("searchResult")) {
-      const movies = JSON.parse(localStorage.getItem("searchResult"));
-      const searchResult = search(movies, keyword, isChecked);
-      setSearchedMovies(searchResult);
-    }
+    checkLocalStorage();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [keyword, isChecked]);
+  // проверка хранилища на наличие поискового запроса
+  function checkLocalStorage() {
+    const result = localStorage.getItem("searchedMovies");
+    if (result) {
+      const movies = JSON.parse(localStorage.getItem("searchedMovies"));
+      const result = search(movies, keyword, isChecked);
+      localStorage.setItem("searchedMovies", JSON.stringify(result));
+      setSearchedMovies(result);
+    }
+  }
+  // для сохранения поискового состояния
+  useEffect(() => {
+    if (beatFilmMovies.length > 0) {
+      const movies = search(beatFilmMovies, keyword, isChecked);
+      localStorage.setItem("searchedMovies", JSON.stringify(movies));
+      localStorage.setItem("keyword", keyword);
+      localStorage.setItem("isChecked", isChecked);
+      setSearchedMovies(movies);
+    }
+  }, [beatFilmMovies, keyword, isChecked]);
 
   //функция поиска по фильмам
   function submitSearch(keyword, isChecked) {
@@ -220,6 +240,7 @@ function App() {
       .getBeatfilmMovies()
       .then((data) => {
         localStorage.setItem("movies", JSON.stringify(data));
+        setBeatFilmMovies(data);
         setIsLoading(false);
       })
       .catch((err) => {
@@ -231,17 +252,6 @@ function App() {
         }, 2000);
       });
   }
-
-  useEffect(() => {
-    if (beatFilmMovies.length > 0) {
-      const movies = search(beatFilmMovies, keyword, isChecked);
-      localStorage.setItem("searchedMovies", JSON.stringify(movies));
-      localStorage.setItem("keyword", keyword);
-      localStorage.setItem("isChecked", isChecked);
-      setSearchedMovies(movies);
-    }
-  }, [beatFilmMovies, keyword, isChecked]);
-
   // Функция поиска фильмов
   function search(movies, keyword, isChecked) {
     let result;
@@ -259,9 +269,11 @@ function App() {
         movie.nameEN.toLowerCase().includes(keyword.toLowerCase())
       );
     });
+    if (result.length === 0) {
+      setSearchResult(NOT_FOUND_SEARCH_MESSAGE);
+    }
     return result;
   }
-
   // функция сохранения фильма в сохраненные
   const handleLikeClick = (movie) => {
     const like = favoriteMovies.some((i) => i.movieId === movie.id);
@@ -294,7 +306,6 @@ function App() {
       handleDislikeClick(dislike);
     }
   };
-
   // функция удаления фильма из сохраненных
   function handleDislikeClick(movie) {
     mainApi
@@ -313,13 +324,12 @@ function App() {
         }, 2000);
       });
   }
-
+  // лайкнут ли данным пользователь фильм?
   const isLiked = (data) => {
     return favoriteMovies.some(
       (i) => i.movieId === data.id && i.owner === currentUser?._id
     );
   };
-
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
@@ -348,7 +358,7 @@ function App() {
             isLiked={isLiked}
             errorMessage={errorMessage}
             setPreloader={setIsLoading}
-            onSubmitSearch={submitSearch}
+            searchResult={searchResult}
           />
           <ProtectedRoute
             exact
