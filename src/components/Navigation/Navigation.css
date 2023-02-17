@@ -8,8 +8,15 @@
     right: 0;
     display: flex;
     flex-direction: column;
-    background-color: #202020;
     border: 1px solid #000000;
+}
+
+.navigation_color_emerald {
+    background-color: #073042;
+}
+
+.navigation_color_dark {
+    background-color: #202020; 
 }
 
 .navigation__close-button {

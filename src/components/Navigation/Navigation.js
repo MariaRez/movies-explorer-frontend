@@ -1,11 +1,22 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import profile from "../../images/profile.svg";
 import "./Navigation.css";
 
 function Navigation({ handleBurgerMenuButton }) {
+  const location = useLocation();
+
+  const navigationClassName = `navigation ${
+    location.pathname === "/" ? "navigation_color_emerald" : "navigation_color_dark"
+  }`;
+  
+  function defineLinkClass(path) {
+    let linkClassName = `navigation__link  ${location.pathname === path ? "navigation__link_checked" : ""}`;
+    return linkClassName;
+  } 
+
   return (
-    <section className="navigation">
+    <section className={navigationClassName}>
       <p className="navigation__overlay" />
       <button
         aria-label="Close navigation"
@@ -16,21 +27,21 @@ function Navigation({ handleBurgerMenuButton }) {
       <nav className="navigation__links">
         <Link
           to="/"
-          className="navigation__link"
+          className={defineLinkClass("/")}
           onClick={handleBurgerMenuButton}
         >
           Главная
         </Link>
         <Link
           to="/movies"
-          className="navigation__link navigation__link_checked"
+          className={defineLinkClass("/movies")}
           onClick={handleBurgerMenuButton}
         >
           Фильмы
         </Link>
         <Link
           to="/saved-movies"
-          className="navigation__link"
+          className={defineLinkClass("/saved-movies")}
           onClick={handleBurgerMenuButton}
         >
           Сохранённые фильмы

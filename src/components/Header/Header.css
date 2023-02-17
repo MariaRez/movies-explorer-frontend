@@ -36,7 +36,7 @@
 .header__link {
     text-decoration: none;
     font-style: normal;
-    font-weight: 500;
+    font-weight: 400;
     font-size: 12px;
     line-height: 16px;
     display: flex;
@@ -45,6 +45,10 @@
     height: 32px;
     cursor: pointer;
     transition: opacity 0.3s ease;
+}
+
+.header__link_checked {
+    font-weight: 500;
 }
 
 .header__link:hover {
@@ -83,7 +87,6 @@
     height: 44px;
     opacity: 1;
     background-image: url(/src/images/burger.svg);
-    background-color: #202020;
     background-repeat: no-repeat;
     background-position: center;
     border: none;
@@ -94,6 +97,14 @@
 
 .header__burger-menu:hover {
     opacity: 0.6;
+}
+
+.header__burger-menu_color_emerald {
+    background-color: #073042;
+}
+
+.header__burger-menu_color_dark {
+    background-color: #202020; 
 }
 
 @media (max-width: 769px) {

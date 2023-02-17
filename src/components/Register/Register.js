@@ -1,9 +1,23 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import logo from "../../images/logo.svg";
+import useFormWithValidation from "../../utils/useFormWithValidation";
 import "./Register.css";
 
-function Register() {
+function Register({ handleRegister, errorMessage, isLoading }) {
+  const { values, handleChange, errors, isValid, resetForm } = useFormWithValidation();
+  const submitButtonClassName = `register__button ${(!isValid || isLoading) && "register__button_disabled"}`;
+  const inputClassName = `register__input ${ isLoading ? "register__input_disabled" : ""}`
+
+  useEffect(() => {
+    resetForm("", "", false);
+  }, [resetForm]); //сброс формы
+
+  function handleSubmit(evt) {
+    evt.preventDefault();
+    handleRegister(values.name, values.email, values.password);
+  }
+
   return (
     <section className="register">
       <div className="register__container">
@@ -11,52 +25,71 @@ function Register() {
           <img className="logo" src={logo} alt="Логотоп" />
         </Link>
         <h3 className="register__title">Добро пожаловать!</h3>
-        <form name="register" className="register__form">
+        <form
+          name="register"
+          className="register__form"
+          onSubmit={handleSubmit}
+        >
           <fieldset className="register__fieldset">
             <label className="register__label" htmlFor="name">
               Имя
             </label>
             <input
-              className="register__input"
-              type="text"
+              className={inputClassName}
+              type="name"
               name="name"
               id="name"
               required
               minLength="2"
               maxLength="40"
+              pattern="^[A-Za-zА-Яа-яЁё /s -]+$"
               placeholder="Ваше имя"
+              value={values.name || ""}
+              onChange={handleChange}
+              disabled={isLoading ? true : false}
             />
           </fieldset>
-          <span className="register__error" id="name-error"></span>
+          <span className="register__error" id="name-error">{errors.name || ""}</span>
           <fieldset className="register__fieldset">
             <label className="register__label" htmlFor="email">
               E-mail
             </label>
             <input
-              className="register__input"
+              className={inputClassName}
               type="email"
               name="email"
               id="email"
+              pattern="^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$"
               required
               placeholder="Ваша почта"
+              value={values.email || ""} //значение почты или пустая строка
+              onChange={handleChange}
+              disabled={isLoading ? true : false}
             />
           </fieldset>
-          <span className="register__error" id="email-error"></span>
+          <span className="register__error" id="email-error">{errors.email || ""}</span>
           <fieldset className="register__fieldset">
             <label className="register__label" htmlFor="password">
               Пароль
             </label>
             <input
-              className="register__input"
+              className={inputClassName}
               type="password"
               name="password"
               id="password"
               required
               placeholder="Ваш пароль"
+              value={values.password || ""} //значение пароля или пустая строка
+              onChange={handleChange}
+              disabled={isLoading ? true : false}
             />
           </fieldset>
-          <span className="register__error" id="password-error"></span>
-          <button className="register__button" type="submit">
+          <span className="register__error" id="password-error">{errors.password || ""}</span>
+          <p className="register__error-server">{errorMessage}</p>
+          <button
+            className={submitButtonClassName}
+            type="submit"
+            disabled={!isValid || isLoading}>
             Зарегистрироваться
           </button>
         </form>

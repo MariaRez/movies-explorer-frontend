@@ -20,7 +20,14 @@ function AboutMe() {
             свое призвание. Безумно люблю гулять, читать детективы и
             околонаучную литературу, готовить и слушать подкасты.
           </p>
-          <a className="about-me__github" href="https://github.com/MariaRez">
+          <a
+            href="https://github.com/MariaRez"
+            rel="noreferrer"
+            target="_blank"
+            aria-label="Link to github"
+            type="button"
+            className="about-me__github"
+          >
             Github
           </a>
         </div>
