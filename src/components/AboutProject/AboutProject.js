@@ -27,18 +27,18 @@ function AboutProject() {
       </div>
       <div className="about-project__illustration">
         <div className="about-project__illustration-container">
-          <p className="about-project__illustration_image about-project__illustration_image_back">
+          <p className="about-project__illustration-image about-project__illustration-image_back">
             1 неделя
           </p>
-          <p className="about-project__illustration_image about-project__illustration_image_front">
+          <p className="about-project__illustration-image about-project__illustration-image_front">
             4 недели
           </p>
         </div>
         <div className="about-project__illustration-container">
-          <p className="about-project__illustration_image about-project__illustration_image_back-text">
+          <p className="about-project__illustration-image about-project__illustration-image_back-text">
             Back-end
           </p>
-          <p className="about-project__illustration_image about-project__illustration_image_front-text">
+          <p className="about-project__illustration-image about-project__illustration-image_front-text">
             Front-end
           </p>
         </div>
