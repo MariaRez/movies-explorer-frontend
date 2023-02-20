@@ -7,7 +7,7 @@ function Profile({ onUpdateUser, handleExit, errorMessage, isLoading }) {
   const currentUser = useContext(CurrentUserContext);
   const { values, handleChange, errors, isValid, resetForm } = useFormWithValidation();
   const checkValid = (!isValid || (currentUser.name === values.name && currentUser.email === values.email));
-  const submitButtonClassName = `form__button form__button_type_change ${checkValid || isLoading ? "form__button_disabled": ""}`;
+  const submitButtonClassName = `profile__button profile__button_type_change ${checkValid || isLoading ? "profile__button_disabled": ""}`;
   const inputClassName = `form__input ${ isLoading ? "form__input_disabled" : ""}`
 
    useEffect(() => {
@@ -75,7 +75,7 @@ function Profile({ onUpdateUser, handleExit, errorMessage, isLoading }) {
         </button>
       </form>
       <button
-        className="form__button form__button_type_exit"
+        className="profile__button profile__button_type_exit"
         aria-label="Exit"
         type="button"
         onClick={handleExit}

@@ -260,9 +260,12 @@ function App() {
         setBeatFilmMovies(movies);
       }
     } else {
-      setTimeout(() => setIsLoading(false), 1000);
+      setTimeout(() => setIsLoading(false), 500);
       setErrorMessageInSearch(NEED_SEARCH_MESSAGE);
       setSearchedMovies([]);
+      setTimeout(() => {
+        setErrorMessageInSearch("");
+      }, 2000);
   }
 }
   // получение фильмов со стороннего ресурса
@@ -408,7 +411,7 @@ function App() {
             handleExit={handleExitSubmit}
             loggedIn={loggedIn}
             component={Profile}
-            errorMessage={errorMessage}
+            errorMessage={errorMessageInProfile}
             isLoading={isLoading}
           />
           <Route exact path="/signin">

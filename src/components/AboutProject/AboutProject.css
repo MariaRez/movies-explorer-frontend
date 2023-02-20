@@ -70,7 +70,7 @@
     flex-direction: row;
 }
 
-.about-project__illustration_image {
+.about-project__illustration-image {
     margin: 0;
     height: 100%;
     font-family: 'Inter';
@@ -82,26 +82,26 @@
     padding-top: 9px;
 }
 
-.about-project__illustration_image_back {
+.about-project__illustration-image_back {
     width: 20%;
     background-color:#3DDC84;
     color: #000000;
 }
 
-.about-project__illustration_image_front {
+.about-project__illustration-image_front {
     width: 80%;
     background-color: #303030;
     color: #FFFFFF;
 }
 
-.about-project__illustration_image_back-text {
+.about-project__illustration-image_back-text {
     width: 20%;
     color: #8B8B8B;
     font-weight: 500;
     margin-top: 14px;
 }
 
-.about-project__illustration_image_front-text {
+.about-project__illustration-image_front-text {
     width: 80%;
     color: #8B8B8B;
     font-weight: 500;
@@ -180,7 +180,7 @@
         margin-top: 4px;
     }
 
-    .about-project__illustration_image {
+    .about-project__illustration-image {
         font-size: 11px;
         line-height: 13px;
         padding-top: 11px;
