@@ -37,3 +37,10 @@
 <li>Функция восстановления пароля</li>
 <li>Изменение пароля пользователя</li>
 </ul>
+<h3 align="center"style="text-decoration:underline; font-style:italic">Дополнительная информация <span style="font-style: normal">&#128222;</span></h3>
+<ul style="list-style: square">
+<li>Публичный IP 158.160.57.76</li>
+<li><a style="color:#3DDC84" href="https://mariarez.students.nomoredomainsclub.ru">Ссылка на фронтенд (ограниченный срок гранта - может не работать)</a></li>
+<li><a style="color:#3DDC84" href="https://api.mariarez.students.nomoredomains.club">Ссылка на бэкенд (ограниченный срок гранта - может не работать)</a></li>
+<li><a style="color:#3DDC84" href="https://disk.yandex.ru/d/XLTAY9OVFSzRHw">Ссылка на сгенерированный макет</a></li>
+<ul>
